@@ -1335,6 +1335,20 @@ let CONFIG = {
 };
 
 // ─── CARREGAR CONFIG DO CLOUDFLARE ──────────────────
+function formatarNumeroWhatsApp(numero) {
+  if (!numero) return '5551999999999';
+  let limpo = numero.toString().replace(/\D/g, ''); // Remove tudo que não for número (parênteses, traços, espaços)
+  if (limpo.startsWith('0')) {
+    limpo = limpo.substring(1); // Remove zero no início se houver
+  }
+  // Se tiver apenas DDD + Número (ex: 51999999999 -> 11 dígitos ou 5133334444 -> 10 dígitos)
+  // Adiciona automaticamente o código do país do Brasil (55)
+  if (limpo.length === 10 || limpo.length === 11) {
+    limpo = '55' + limpo;
+  }
+  return limpo;
+}
+
 async function carregarConfiguracoes() {
   try {
     const resposta = await fetch('/config');
@@ -1345,6 +1359,10 @@ async function carregarConfiguracoes() {
   } catch (error) {
     console.error("Falha ao obter configurações do Cloudflare Pages. Usando fallbacks.", error);
   }
+  
+  // Tratamento de segurança para formatar o número do WhatsApp corretamente
+  CONFIG.wpp = formatarNumeroWhatsApp(CONFIG.wpp);
+  
   inicializarApp();
 }
 
