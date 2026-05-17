@@ -1327,15 +1327,31 @@ footer {
 </a>
 
 <script>
-// ─── CONFIGURAÇÕES (editar aqui) ───────────────────
-const CONFIG = {
-  wpp: '5551999999999',           // Número WhatsApp com DDI+DDD sem espaços
+// ─── CONFIGURAÇÕES ─────────────────────────────────
+let CONFIG = {
+  wpp: '5551999999999',           // Fallback: Número WhatsApp padrão
   wppMsg: 'Olá! Gostaria de solicitar uma cotação de frete.',
-  web3formsKey: 'SUA_CHAVE_WEB3FORMS_AQUI',  // Substituir pela chave real
+  web3formsKey: 'SUA_CHAVE_WEB3FORMS_AQUI',  // Fallback: Chave Web3Forms padrão
 };
 
-// ─── OFUSCAÇÃO DOS CONTATOS ────────────────────────
-window.addEventListener('DOMContentLoaded', () => {
+// ─── CARREGAR CONFIG DO CLOUDFLARE ──────────────────
+async function carregarConfiguracoes() {
+  try {
+    const resposta = await fetch('/config');
+    if (resposta.ok) {
+      const dados = await resposta.json();
+      CONFIG = { ...CONFIG, ...dados };
+    }
+  } catch (error) {
+    console.error("Falha ao obter configurações do Cloudflare Pages. Usando fallbacks.", error);
+  }
+  inicializarApp();
+}
+
+window.addEventListener('DOMContentLoaded', carregarConfiguracoes);
+
+function inicializarApp() {
+  // ─── OFUSCAÇÃO DOS CONTATOS ────────────────────────
   const tel = ['(', 'x', 'x', ')', ' ', 'x', 'x', 'x', 'x', 'x', '-', 'x', 'x', 'x', 'x'].join('');
   const email = ['c','o','n','t','a','t','o','@','t','r','a','n','s','p','o','r','t','a','c','e','r','t','a','.','c','o','m','.','b','r'].join('');
   const telEl = document.getElementById('tel-placeholder');
@@ -1346,7 +1362,7 @@ window.addEventListener('DOMContentLoaded', () => {
   // Links WhatsApp
   const wppUrl = `https://wa.me/${CONFIG.wpp}?text=${encodeURIComponent(CONFIG.wppMsg)}`;
   document.querySelectorAll('#whatsapp-link, #wpp-float-btn').forEach(el => el.href = wppUrl);
-});
+}
 
 // ─── NAVBAR SCROLL ────────────────────────────────
 const navbar = document.getElementById('navbar');
