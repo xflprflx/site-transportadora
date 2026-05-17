@@ -1,1551 +1,2415 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com https://api.web3forms.com; img-src 'self' data:;">
-<title>TransportaCerta — Entrega com Precisão</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-<style>
-:root {
-  --azul: #0f2744;
-  --azul-medio: #1a4a8a;
-  --azul-claro: #2563eb;
-  --azul-brilho: #3b82f6;
-  --cinza-bg: #f4f6f9;
-  --cinza-borda: #dde3ee;
-  --branco: #ffffff;
-  --texto: #0f2744;
-  --texto-muted: #5a6a82;
-  --laranja: #e85d04;
-  --radius: 12px;
-  --radius-lg: 20px;
-  --shadow: 0 4px 24px rgba(15,39,68,0.10);
-  --shadow-lg: 0 8px 48px rgba(15,39,68,0.16);
-}
-
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-html { scroll-behavior: smooth; }
-
-body {
-  font-family: 'DM Sans', sans-serif;
-  color: var(--texto);
-  background: var(--branco);
-  overflow-x: hidden;
-}
-
-h1,h2,h3,h4 { font-family: 'Syne', sans-serif; line-height: 1.15; }
-
-/* ─── NAVBAR ─── */
-nav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-  background: rgba(15,39,68,0.97);
-  backdrop-filter: blur(12px);
-  padding: 0 5%;
-  display: flex; align-items: center; justify-content: space-between;
-  height: 68px;
-  transition: box-shadow .3s;
-}
-nav.scrolled { box-shadow: 0 2px 24px rgba(0,0,0,.35); }
-
-.nav-logo {
-  display: flex; align-items: center; gap: 10px;
-  text-decoration: none;
-}
-.nav-logo-icon {
-  width: 38px; height: 38px;
-  background: var(--laranja);
-  border-radius: 8px;
-  display: flex; align-items: center; justify-content: center;
-}
-.nav-logo-icon svg { width: 22px; height: 22px; fill: white; }
-.nav-logo-text { font-family: 'Syne', sans-serif; font-size: 1.15rem; font-weight: 700; color: white; }
-.nav-logo-text span { color: var(--laranja); }
-
-.nav-links {
-  display: flex; align-items: center; gap: 2rem;
-  list-style: none;
-}
-.nav-links a {
-  color: rgba(255,255,255,.75);
-  text-decoration: none;
-  font-size: .9rem;
-  font-weight: 400;
-  letter-spacing: .02em;
-  transition: color .2s;
-}
-.nav-links a:hover { color: white; }
-
-.nav-cta {
-  background: var(--laranja);
-  color: white !important;
-  padding: .5rem 1.25rem;
-  border-radius: 8px;
-  font-weight: 500 !important;
-  transition: background .2s !important;
-}
-.nav-cta:hover { background: #c44d00 !important; color: white !important; }
-
-.hamburger {
-  display: none;
-  flex-direction: column; gap: 5px;
-  cursor: pointer; background: none; border: none; padding: 4px;
-}
-.hamburger span {
-  display: block; width: 24px; height: 2px;
-  background: white; border-radius: 2px;
-  transition: all .3s;
-}
-.hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
-.hamburger.open span:nth-child(2) { opacity: 0; }
-.hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
-
-/* Mobile menu */
-.mobile-menu {
-  display: none;
-  position: fixed; top: 68px; left: 0; right: 0; z-index: 99;
-  background: var(--azul);
-  padding: 1.5rem 5%;
-  flex-direction: column; gap: 1rem;
-}
-.mobile-menu.open { display: flex; }
-.mobile-menu a {
-  color: rgba(255,255,255,.8);
-  text-decoration: none;
-  font-size: 1rem;
-  padding: .5rem 0;
-  border-bottom: 1px solid rgba(255,255,255,.08);
-}
-.mobile-menu a:last-child { border-bottom: none; }
-.mobile-menu .m-cta {
-  background: var(--laranja);
-  color: white;
-  text-align: center;
-  padding: .75rem;
-  border-radius: 8px;
-  margin-top: .5rem;
-  border-bottom: none !important;
-}
-
-/* ─── HERO ─── */
-#hero {
-  min-height: 100vh;
-  background: linear-gradient(135deg, #0a1d36 0%, #0f2744 50%, #122f52 100%);
-  position: relative;
-  display: flex; align-items: center;
-  padding: 120px 5% 80px;
-  overflow: hidden;
-}
-
-.hero-grid {
-  position: absolute; inset: 0; opacity: .06;
-  background-image:
-    linear-gradient(rgba(255,255,255,.5) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,.5) 1px, transparent 1px);
-  background-size: 60px 60px;
-}
-
-.hero-circle {
-  position: absolute;
-  border-radius: 50%;
-  background: rgba(37,99,235,.15);
-  animation: pulse 6s ease-in-out infinite;
-}
-.hero-circle.c1 { width: 600px; height: 600px; top: -200px; right: -150px; }
-.hero-circle.c2 { width: 400px; height: 400px; bottom: -100px; right: 200px; animation-delay: 2s; }
-@keyframes pulse { 0%,100%{transform:scale(1);opacity:.15} 50%{transform:scale(1.05);opacity:.22} }
-
-.hero-inner {
-  position: relative; z-index: 2;
-  max-width: 1100px; width: 100%;
-  margin: 0 auto;
-  display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
-}
-
-.hero-badge {
-  display: inline-flex; align-items: center; gap: 8px;
-  background: rgba(232,93,4,.15);
-  border: 1px solid rgba(232,93,4,.3);
-  color: #f97316;
-  font-size: .8rem; font-weight: 500; letter-spacing: .06em;
-  padding: .4rem 1rem; border-radius: 100px;
-  margin-bottom: 1.5rem;
-  text-transform: uppercase;
-}
-.hero-badge svg { width: 14px; height: 14px; }
-
-.hero-title {
-  font-family: 'Syne', sans-serif;
-  font-size: clamp(2.2rem, 4vw, 3.5rem);
-  font-weight: 800;
-  color: white;
-  line-height: 1.1;
-  margin-bottom: 1.25rem;
-}
-.hero-title span { color: var(--laranja); }
-
-.hero-sub {
-  font-size: 1.05rem;
-  color: rgba(255,255,255,.65);
-  line-height: 1.7;
-  max-width: 480px;
-  margin-bottom: 2.5rem;
-}
-
-.hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
-
-.btn-primary {
-  background: var(--laranja);
-  color: white;
-  padding: .85rem 2rem;
-  border-radius: var(--radius);
-  font-family: 'DM Sans', sans-serif;
-  font-size: .95rem; font-weight: 500;
-  text-decoration: none;
-  transition: background .2s, transform .15s;
-  display: inline-flex; align-items: center; gap: 8px;
-}
-.btn-primary:hover { background: #c44d00; transform: translateY(-2px); }
-
-.btn-secondary {
-  background: rgba(255,255,255,.08);
-  border: 1px solid rgba(255,255,255,.2);
-  color: white;
-  padding: .85rem 2rem;
-  border-radius: var(--radius);
-  font-family: 'DM Sans', sans-serif;
-  font-size: .95rem; font-weight: 400;
-  text-decoration: none;
-  transition: background .2s, transform .15s;
-  display: inline-flex; align-items: center; gap: 8px;
-}
-.btn-secondary:hover { background: rgba(255,255,255,.14); transform: translateY(-2px); }
-
-.hero-stats {
-  display: flex; gap: 2.5rem; margin-top: 3rem; padding-top: 2rem;
-  border-top: 1px solid rgba(255,255,255,.1);
-}
-.stat-item {}
-.stat-num {
-  font-family: 'Syne', sans-serif;
-  font-size: 2rem; font-weight: 800;
-  color: white;
-}
-.stat-num span { color: var(--laranja); }
-.stat-label { font-size: .8rem; color: rgba(255,255,255,.5); margin-top: 2px; }
-
-.hero-visual {
-  display: flex; justify-content: center; align-items: center;
-}
-.hero-truck-wrap {
-  position: relative;
-  width: 100%; max-width: 460px;
-}
-.hero-truck-svg { width: 100%; height: auto; }
-
-/* Card flutuante */
-.hero-card {
-  position: absolute;
-  background: white;
-  border-radius: var(--radius);
-  padding: .75rem 1rem;
-  box-shadow: var(--shadow-lg);
-  display: flex; align-items: center; gap: 10px;
-  font-size: .82rem;
-  animation: float 3s ease-in-out infinite;
-}
-.hero-card.c1 { bottom: -10px; left: -20px; animation-delay: 0s; }
-.hero-card.c2 { top: 30px; right: -20px; animation-delay: 1.5s; }
-.hero-card-icon {
-  width: 36px; height: 36px; border-radius: 8px;
-  display: flex; align-items: center; justify-content: center;
-}
-.hero-card.c1 .hero-card-icon { background: #ecfdf5; }
-.hero-card.c2 .hero-card-icon { background: #eff6ff; }
-.hero-card-icon svg { width: 18px; height: 18px; }
-.hero-card-title { font-weight: 600; color: var(--texto); font-size: .8rem; }
-.hero-card-sub { color: var(--texto-muted); font-size: .73rem; }
-@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
-
-/* ─── SECTIONS GENÉRICO ─── */
-section { padding: 90px 5%; }
-.section-inner { max-width: 1100px; margin: 0 auto; }
-
-.section-label {
-  display: inline-block;
-  font-size: .75rem; font-weight: 500; letter-spacing: .1em;
-  text-transform: uppercase;
-  color: var(--azul-claro);
-  background: rgba(37,99,235,.08);
-  border: 1px solid rgba(37,99,235,.15);
-  padding: .3rem .9rem; border-radius: 100px;
-  margin-bottom: 1rem;
-}
-.section-title {
-  font-family: 'Syne', sans-serif;
-  font-size: clamp(1.7rem, 3vw, 2.4rem);
-  font-weight: 700;
-  color: var(--azul);
-  margin-bottom: .75rem;
-}
-.section-sub {
-  font-size: 1rem; color: var(--texto-muted);
-  max-width: 540px; line-height: 1.7;
-  margin-bottom: 3rem;
-}
-
-/* ─── SOBRE ─── */
-#sobre { background: var(--cinza-bg); }
-
-.sobre-grid {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
-}
-
-.sobre-diferenciais {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 2rem;
-}
-.diferencial-card {
-  background: white;
-  border: 1px solid var(--cinza-borda);
-  border-radius: var(--radius);
-  padding: 1.25rem;
-}
-.diferencial-icon {
-  width: 40px; height: 40px;
-  background: rgba(37,99,235,.08);
-  border-radius: 10px;
-  display: flex; align-items: center; justify-content: center;
-  margin-bottom: .75rem;
-}
-.diferencial-icon svg { width: 20px; height: 20px; stroke: var(--azul-claro); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-.diferencial-card h4 { font-size: .9rem; font-weight: 600; color: var(--azul); margin-bottom: .25rem; }
-.diferencial-card p { font-size: .82rem; color: var(--texto-muted); line-height: 1.5; }
-
-.sobre-numeros {
-  background: var(--azul);
-  border-radius: var(--radius-lg);
-  padding: 2.5rem;
-  display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;
-}
-.num-item {}
-.num-val {
-  font-family: 'Syne', sans-serif;
-  font-size: 2.4rem; font-weight: 800;
-  color: white;
-}
-.num-val span { color: var(--laranja); }
-.num-label { font-size: .82rem; color: rgba(255,255,255,.55); margin-top: 4px; }
-.sobre-texto p { font-size: 1rem; color: var(--texto-muted); line-height: 1.8; margin-bottom: 1rem; }
-
-/* ─── SERVIÇOS ─── */
-#servicos { background: white; }
-
-.servicos-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
-}
-.servico-card {
-  background: var(--cinza-bg);
-  border: 1px solid var(--cinza-borda);
-  border-radius: var(--radius-lg);
-  padding: 2rem 1.75rem;
-  transition: transform .25s, box-shadow .25s, border-color .25s;
-  position: relative; overflow: hidden;
-}
-.servico-card::before {
-  content: '';
-  position: absolute; bottom: 0; left: 0; right: 0;
-  height: 3px;
-  background: var(--azul-claro);
-  transform: scaleX(0); transform-origin: left;
-  transition: transform .3s;
-}
-.servico-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); border-color: var(--azul-brilho); }
-.servico-card:hover::before { transform: scaleX(1); }
-
-.servico-icon {
-  width: 52px; height: 52px;
-  background: rgba(37,99,235,.1);
-  border-radius: 14px;
-  display: flex; align-items: center; justify-content: center;
-  margin-bottom: 1.25rem;
-}
-.servico-icon svg { width: 26px; height: 26px; stroke: var(--azul-claro); fill: none; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
-
-.servico-card h3 { font-size: 1.05rem; font-weight: 700; color: var(--azul); margin-bottom: .5rem; }
-.servico-card p { font-size: .875rem; color: var(--texto-muted); line-height: 1.65; }
-
-/* ─── COBERTURA ─── */
-#cobertura { background: var(--cinza-bg); }
-
-.cobertura-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
-
-.cobertura-mapa {
-  background: var(--azul);
-  border-radius: var(--radius-lg);
-  padding: 2.5rem;
-  position: relative; overflow: hidden;
-}
-.cobertura-mapa::after {
-  content: '';
-  position: absolute; inset: 0;
-  background: radial-gradient(circle at 60% 50%, rgba(37,99,235,.2) 0%, transparent 70%);
-}
-.mapa-placeholder {
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  min-height: 280px; position: relative; z-index: 2;
-  text-align: center;
-}
-.mapa-placeholder svg { width: 80px; height: 80px; opacity: .3; fill: white; margin-bottom: 1rem; }
-.mapa-placeholder p { color: rgba(255,255,255,.4); font-size: .875rem; }
-
-.cobertura-regioes h3 { font-size: 1rem; font-weight: 600; color: var(--azul); margin-bottom: 1rem; }
-.cobertura-lista { list-style: none; display: flex; flex-direction: column; gap: .6rem; }
-.cobertura-lista li {
-  display: flex; align-items: center; gap: .75rem;
-  background: white; border: 1px solid var(--cinza-borda);
-  border-radius: var(--radius); padding: .75rem 1rem;
-  font-size: .9rem; color: var(--texto);
-}
-.cobertura-lista li svg { width: 16px; height: 16px; stroke: var(--azul-claro); fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
-
-/* ─── DEPOIMENTOS ─── */
-#depoimentos { background: white; }
-
-.depoimentos-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
-
-.depoimento-card {
-  background: var(--cinza-bg);
-  border: 1px solid var(--cinza-borda);
-  border-radius: var(--radius-lg);
-  padding: 1.75rem;
-  transition: transform .25s, box-shadow .25s;
-}
-.depoimento-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
-
-.estrelas { display: flex; gap: 3px; margin-bottom: 1rem; }
-.estrelas svg { width: 16px; height: 16px; fill: #f59e0b; }
-
-.depoimento-texto {
-  font-size: .9rem; color: var(--texto-muted);
-  line-height: 1.7; margin-bottom: 1.25rem;
-  font-style: italic;
-}
-.depoimento-autor { display: flex; align-items: center; gap: .75rem; }
-.autor-avatar {
-  width: 40px; height: 40px; border-radius: 50%;
-  background: var(--azul-medio);
-  display: flex; align-items: center; justify-content: center;
-  font-family: 'Syne', sans-serif; font-size: .9rem; font-weight: 700; color: white;
-}
-.autor-nome { font-weight: 600; font-size: .875rem; color: var(--azul); }
-.autor-empresa { font-size: .78rem; color: var(--texto-muted); }
-
-/* ─── COTAÇÃO ─── */
-#cotacao { background: var(--azul); }
-
-#cotacao .section-label { color: #93c5fd; background: rgba(147,197,253,.1); border-color: rgba(147,197,253,.2); }
-#cotacao .section-title { color: white; }
-#cotacao .section-sub { color: rgba(255,255,255,.6); }
-
-.cotacao-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
-
-.cotacao-info p { color: rgba(255,255,255,.65); font-size: .95rem; line-height: 1.75; margin-bottom: 2rem; }
-
-.cotacao-contatos { display: flex; flex-direction: column; gap: .75rem; }
-.contato-item {
-  display: flex; align-items: center; gap: .75rem;
-  color: rgba(255,255,255,.7); font-size: .9rem;
-}
-.contato-item svg { width: 18px; height: 18px; stroke: var(--laranja); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-
-.form-card {
-  background: white;
-  border-radius: var(--radius-lg);
-  padding: 2.5rem;
-}
-
-.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-.form-group { margin-bottom: 1.25rem; }
-.form-group.full { grid-column: 1 / -1; }
-
-label {
-  display: block;
-  font-size: .8rem; font-weight: 500;
-  color: var(--texto-muted);
-  margin-bottom: .4rem;
-  letter-spacing: .02em;
-}
-
-input, select, textarea {
-  width: 100%;
-  padding: .7rem .9rem;
-  border: 1.5px solid var(--cinza-borda);
-  border-radius: var(--radius);
-  font-family: 'DM Sans', sans-serif;
-  font-size: .9rem;
-  color: var(--texto);
-  background: var(--cinza-bg);
-  transition: border-color .2s, box-shadow .2s;
-  outline: none;
-  appearance: none;
-}
-input:focus, select:focus, textarea:focus {
-  border-color: var(--azul-claro);
-  box-shadow: 0 0 0 3px rgba(37,99,235,.1);
-  background: white;
-}
-textarea { resize: vertical; min-height: 90px; }
-
-/* Honeypot */
-.hp-field { display: none !important; }
-
-.form-actions { display: flex; flex-direction: column; gap: .75rem; margin-top: 1.5rem; }
-
-.btn-form {
-  width: 100%;
-  padding: .9rem;
-  background: var(--azul-claro);
-  color: white;
-  border: none; border-radius: var(--radius);
-  font-family: 'DM Sans', sans-serif;
-  font-size: 1rem; font-weight: 500;
-  cursor: pointer;
-  transition: background .2s, transform .15s;
-  display: flex; align-items: center; justify-content: center; gap: 8px;
-}
-.btn-form:hover { background: var(--azul); transform: translateY(-2px); }
-.btn-form:disabled { opacity: .6; cursor: not-allowed; transform: none; }
-
-.btn-wpp {
-  width: 100%;
-  padding: .85rem;
-  background: #25d366;
-  color: white;
-  border: none; border-radius: var(--radius);
-  font-family: 'DM Sans', sans-serif;
-  font-size: .95rem; font-weight: 500;
-  cursor: pointer;
-  text-decoration: none;
-  display: flex; align-items: center; justify-content: center; gap: 8px;
-  transition: background .2s, transform .15s;
-}
-.btn-wpp:hover { background: #128c5e; transform: translateY(-2px); }
-
-.form-msg {
-  padding: .75rem 1rem;
-  border-radius: var(--radius);
-  font-size: .875rem;
-  display: none;
-  margin-top: .5rem;
-}
-.form-msg.success { background: #ecfdf5; color: #065f46; border: 1px solid #6ee7b7; display: block; }
-.form-msg.error { background: #fef2f2; color: #991b1b; border: 1px solid #fca5a5; display: block; }
-
-/* ─── FAQ ─── */
-#faq { background: var(--cinza-bg); }
-
-.faq-list { max-width: 760px; margin: 0 auto; }
-
-.faq-item {
-  background: white;
-  border: 1px solid var(--cinza-borda);
-  border-radius: var(--radius);
-  margin-bottom: .75rem;
-  overflow: hidden;
-}
-.faq-q {
-  width: 100%;
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 1.25rem 1.5rem;
-  background: none; border: none; cursor: pointer;
-  font-family: 'DM Sans', sans-serif;
-  font-size: .95rem; font-weight: 500;
-  color: var(--azul);
-  text-align: left;
-  gap: 1rem;
-}
-.faq-q svg {
-  width: 20px; height: 20px; flex-shrink: 0;
-  stroke: var(--azul-claro); fill: none; stroke-width: 2; stroke-linecap: round;
-  transition: transform .3s;
-}
-.faq-item.open .faq-q svg { transform: rotate(180deg); }
-.faq-a {
-  max-height: 0; overflow: hidden;
-  transition: max-height .35s ease;
-}
-.faq-a-inner {
-  padding: 0 1.5rem 1.25rem;
-  font-size: .9rem; color: var(--texto-muted); line-height: 1.75;
-}
-
-/* ─── RODAPÉ ─── */
-footer {
-  background: #080f1a;
-  color: rgba(255,255,255,.6);
-  padding: 60px 5% 30px;
-}
-.footer-grid {
-  max-width: 1100px; margin: 0 auto;
-  display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem;
-  margin-bottom: 3rem;
-}
-.footer-brand p { font-size: .875rem; line-height: 1.7; margin-top: 1rem; max-width: 280px; }
-
-.footer-col h4 {
-  font-family: 'Syne', sans-serif;
-  font-size: .875rem; font-weight: 600;
-  color: white; margin-bottom: 1rem;
-  letter-spacing: .04em;
-}
-.footer-col ul { list-style: none; display: flex; flex-direction: column; gap: .5rem; }
-.footer-col ul li a {
-  color: rgba(255,255,255,.5);
-  text-decoration: none; font-size: .85rem;
-  transition: color .2s;
-}
-.footer-col ul li a:hover { color: white; }
-
-.footer-socials { display: flex; gap: .75rem; margin-top: 1.25rem; }
-.social-btn {
-  width: 38px; height: 38px;
-  background: rgba(255,255,255,.07);
-  border-radius: 8px;
-  display: flex; align-items: center; justify-content: center;
-  text-decoration: none;
-  transition: background .2s;
-}
-.social-btn:hover { background: var(--azul-claro); }
-.social-btn svg { width: 16px; height: 16px; fill: rgba(255,255,255,.7); }
-
-.footer-bottom {
-  max-width: 1100px; margin: 0 auto;
-  border-top: 1px solid rgba(255,255,255,.07);
-  padding-top: 1.5rem;
-  display: flex; align-items: center; justify-content: space-between;
-  font-size: .8rem;
-}
-
-/* ─── WHATSAPP FLUTUANTE ─── */
-.wpp-float {
-  position: fixed; bottom: 2rem; right: 2rem; z-index: 200;
-  width: 56px; height: 56px;
-  background: #25d366;
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 4px 20px rgba(37,211,102,.4);
-  text-decoration: none;
-  transition: transform .2s, box-shadow .2s;
-  animation: wpp-pulse 2.5s infinite;
-}
-.wpp-float:hover { transform: scale(1.12); box-shadow: 0 6px 28px rgba(37,211,102,.55); }
-.wpp-float svg { width: 30px; height: 30px; fill: white; }
-@keyframes wpp-pulse {
-  0%,100%{ box-shadow: 0 4px 20px rgba(37,211,102,.4); }
-  50%{ box-shadow: 0 4px 20px rgba(37,211,102,.4), 0 0 0 10px rgba(37,211,102,.12); }
-}
-
-/* ─── ANIMAÇÕES SCROLL ─── */
-.fade-up {
-  opacity: 0; transform: translateY(30px);
-  transition: opacity .6s ease, transform .6s ease;
-}
-.fade-up.visible { opacity: 1; transform: translateY(0); }
-
-/* ─── RESPONSIVO ─── */
-@media (max-width: 900px) {
-  .nav-links { display: none; }
-  .hamburger { display: flex; }
-  .hero-inner { grid-template-columns: 1fr; text-align: center; gap: 2.5rem; }
-  .hero-btns { justify-content: center; }
-  .hero-stats { justify-content: center; }
-  .hero-visual { display: none; }
-  .sobre-grid { grid-template-columns: 1fr; }
-  .servicos-grid { grid-template-columns: 1fr 1fr; }
-  .cobertura-inner { grid-template-columns: 1fr; }
-  .depoimentos-grid { grid-template-columns: 1fr; }
-  .cotacao-grid { grid-template-columns: 1fr; }
-  .footer-grid { grid-template-columns: 1fr 1fr; }
-}
-@media (max-width: 600px) {
-  section { padding: 60px 5%; }
-  .servicos-grid { grid-template-columns: 1fr; }
-  .form-row { grid-template-columns: 1fr; }
-  .sobre-diferenciais { grid-template-columns: 1fr; }
-  .sobre-numeros { grid-template-columns: 1fr; gap: 1.5rem; }
-  .footer-grid { grid-template-columns: 1fr; }
-  .footer-bottom { flex-direction: column; gap: .5rem; text-align: center; }
-  .hero-stats { flex-direction: column; gap: 1rem; }
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy"
+    content="default-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com https://api.web3forms.com; img-src 'self' data:;">
+  <title>TransportaCerta — Entrega com Precisão</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --azul: #0f2744;
+      --azul-medio: #1a4a8a;
+      --azul-claro: #2563eb;
+      --azul-brilho: #3b82f6;
+      --cinza-bg: #f4f6f9;
+      --cinza-borda: #dde3ee;
+      --branco: #ffffff;
+      --texto: #0f2744;
+      --texto-muted: #5a6a82;
+      --laranja: #e85d04;
+      --radius: 12px;
+      --radius-lg: 20px;
+      --shadow: 0 4px 24px rgba(15, 39, 68, 0.10);
+      --shadow-lg: 0 8px 48px rgba(15, 39, 68, 0.16);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      color: var(--texto);
+      background: var(--branco);
+      overflow-x: hidden;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4 {
+      font-family: 'Syne', sans-serif;
+      line-height: 1.15;
+    }
+
+    /* ─── NAVBAR ─── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(15, 39, 68, 0.97);
+      backdrop-filter: blur(12px);
+      padding: 0 5%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 68px;
+      transition: box-shadow .3s;
+    }
+
+    nav.scrolled {
+      box-shadow: 0 2px 24px rgba(0, 0, 0, .35);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .nav-logo-icon {
+      width: 38px;
+      height: 38px;
+      background: var(--laranja);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav-logo-icon svg {
+      width: 22px;
+      height: 22px;
+      fill: white;
+    }
+
+    .nav-logo-text {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: white;
+    }
+
+    .nav-logo-text span {
+      color: var(--laranja);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: rgba(255, 255, 255, .75);
+      text-decoration: none;
+      font-size: .9rem;
+      font-weight: 400;
+      letter-spacing: .02em;
+      transition: color .2s;
+    }
+
+    .nav-links a:hover {
+      color: white;
+    }
+
+    .nav-cta {
+      background: var(--laranja);
+      color: white !important;
+      padding: .5rem 1.25rem;
+      border-radius: 8px;
+      font-weight: 500 !important;
+      transition: background .2s !important;
+    }
+
+    .nav-cta:hover {
+      background: #c44d00 !important;
+      color: white !important;
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: white;
+      border-radius: 2px;
+      transition: all .3s;
+    }
+
+    .hamburger.open span:nth-child(1) {
+      transform: rotate(45deg) translate(5px, 5px);
+    }
+
+    .hamburger.open span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .hamburger.open span:nth-child(3) {
+      transform: rotate(-45deg) translate(5px, -5px);
+    }
+
+    /* Mobile menu */
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 68px;
+      left: 0;
+      right: 0;
+      z-index: 99;
+      background: var(--azul);
+      padding: 1.5rem 5%;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .mobile-menu.open {
+      display: flex;
+    }
+
+    .mobile-menu a {
+      color: rgba(255, 255, 255, .8);
+      text-decoration: none;
+      font-size: 1rem;
+      padding: .5rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, .08);
+    }
+
+    .mobile-menu a:last-child {
+      border-bottom: none;
+    }
+
+    .mobile-menu .m-cta {
+      background: var(--laranja);
+      color: white;
+      text-align: center;
+      padding: .75rem;
+      border-radius: 8px;
+      margin-top: .5rem;
+      border-bottom: none !important;
+    }
+
+    /* ─── HERO ─── */
+    #hero {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #0a1d36 0%, #0f2744 50%, #122f52 100%);
+      position: relative;
+      display: flex;
+      align-items: center;
+      padding: 120px 5% 80px;
+      overflow: hidden;
+    }
+
+    .hero-grid {
+      position: absolute;
+      inset: 0;
+      opacity: .06;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, .5) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, .5) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+
+    .hero-circle {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(37, 99, 235, .15);
+      animation: pulse 6s ease-in-out infinite;
+    }
+
+    .hero-circle.c1 {
+      width: 600px;
+      height: 600px;
+      top: -200px;
+      right: -150px;
+    }
+
+    .hero-circle.c2 {
+      width: 400px;
+      height: 400px;
+      bottom: -100px;
+      right: 200px;
+      animation-delay: 2s;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        transform: scale(1);
+        opacity: .15
+      }
+
+      50% {
+        transform: scale(1.05);
+        opacity: .22
+      }
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 2;
+      max-width: 1100px;
+      width: 100%;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(232, 93, 4, .15);
+      border: 1px solid rgba(232, 93, 4, .3);
+      color: #f97316;
+      font-size: .8rem;
+      font-weight: 500;
+      letter-spacing: .06em;
+      padding: .4rem 1rem;
+      border-radius: 100px;
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+    }
+
+    .hero-badge svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    .hero-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2.2rem, 4vw, 3.5rem);
+      font-weight: 800;
+      color: white;
+      line-height: 1.1;
+      margin-bottom: 1.25rem;
+    }
+
+    .hero-title span {
+      color: var(--laranja);
+    }
+
+    .hero-sub {
+      font-size: 1.05rem;
+      color: rgba(255, 255, 255, .65);
+      line-height: 1.7;
+      max-width: 480px;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-btns {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: var(--laranja);
+      color: white;
+      padding: .85rem 2rem;
+      border-radius: var(--radius);
+      font-family: 'DM Sans', sans-serif;
+      font-size: .95rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: background .2s, transform .15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-primary:hover {
+      background: #c44d00;
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, .08);
+      border: 1px solid rgba(255, 255, 255, .2);
+      color: white;
+      padding: .85rem 2rem;
+      border-radius: var(--radius);
+      font-family: 'DM Sans', sans-serif;
+      font-size: .95rem;
+      font-weight: 400;
+      text-decoration: none;
+      transition: background .2s, transform .15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, .14);
+      transform: translateY(-2px);
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 2.5rem;
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(255, 255, 255, .1);
+    }
+
+    .stat-item {}
+
+    .stat-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 2rem;
+      font-weight: 800;
+      color: white;
+    }
+
+    .stat-num span {
+      color: var(--laranja);
+    }
+
+    .stat-label {
+      font-size: .8rem;
+      color: rgba(255, 255, 255, .5);
+      margin-top: 2px;
+    }
+
+    .hero-visual {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .hero-truck-wrap {
+      position: relative;
+      width: 100%;
+      max-width: 460px;
+    }
+
+    .hero-truck-svg {
+      width: 100%;
+      height: auto;
+    }
+
+    /* Card flutuante */
+    .hero-card {
+      position: absolute;
+      background: white;
+      border-radius: var(--radius);
+      padding: .75rem 1rem;
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: .82rem;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .hero-card.c1 {
+      bottom: -10px;
+      left: -20px;
+      animation-delay: 0s;
+    }
+
+    .hero-card.c2 {
+      top: 30px;
+      right: -20px;
+      animation-delay: 1.5s;
+    }
+
+    .hero-card-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hero-card.c1 .hero-card-icon {
+      background: #ecfdf5;
+    }
+
+    .hero-card.c2 .hero-card-icon {
+      background: #eff6ff;
+    }
+
+    .hero-card-icon svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .hero-card-title {
+      font-weight: 600;
+      color: var(--texto);
+      font-size: .8rem;
+    }
+
+    .hero-card-sub {
+      color: var(--texto-muted);
+      font-size: .73rem;
+    }
+
+    @keyframes float {
+
+      0%,
+      100% {
+        transform: translateY(0)
+      }
+
+      50% {
+        transform: translateY(-8px)
+      }
+    }
+
+    /* ─── SECTIONS GENÉRICO ─── */
+    section {
+      padding: 90px 5%;
+    }
+
+    .section-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--azul-claro);
+      background: rgba(37, 99, 235, .08);
+      border: 1px solid rgba(37, 99, 235, .15);
+      padding: .3rem .9rem;
+      border-radius: 100px;
+      margin-bottom: 1rem;
+    }
+
+    .section-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(1.7rem, 3vw, 2.4rem);
+      font-weight: 700;
+      color: var(--azul);
+      margin-bottom: .75rem;
+    }
+
+    .section-sub {
+      font-size: 1rem;
+      color: var(--texto-muted);
+      max-width: 540px;
+      line-height: 1.7;
+      margin-bottom: 3rem;
+    }
+
+    /* ─── SOBRE ─── */
+    #sobre {
+      background: var(--cinza-bg);
+    }
+
+    .sobre-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .sobre-diferenciais {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .diferencial-card {
+      background: white;
+      border: 1px solid var(--cinza-borda);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+    }
+
+    .diferencial-icon {
+      width: 40px;
+      height: 40px;
+      background: rgba(37, 99, 235, .08);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: .75rem;
+    }
+
+    .diferencial-icon svg {
+      width: 20px;
+      height: 20px;
+      stroke: var(--azul-claro);
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .diferencial-card h4 {
+      font-size: .9rem;
+      font-weight: 600;
+      color: var(--azul);
+      margin-bottom: .25rem;
+    }
+
+    .diferencial-card p {
+      font-size: .82rem;
+      color: var(--texto-muted);
+      line-height: 1.5;
+    }
+
+    .sobre-numeros {
+      background: var(--azul);
+      border-radius: var(--radius-lg);
+      padding: 2.5rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+
+    .num-item {}
+
+    .num-val {
+      font-family: 'Syne', sans-serif;
+      font-size: 2.4rem;
+      font-weight: 800;
+      color: white;
+    }
+
+    .num-val span {
+      color: var(--laranja);
+    }
+
+    .num-label {
+      font-size: .82rem;
+      color: rgba(255, 255, 255, .55);
+      margin-top: 4px;
+    }
+
+    .sobre-texto p {
+      font-size: 1rem;
+      color: var(--texto-muted);
+      line-height: 1.8;
+      margin-bottom: 1rem;
+    }
+
+    /* ─── SERVIÇOS ─── */
+    #servicos {
+      background: white;
+    }
+
+    .servicos-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .servico-card {
+      background: var(--cinza-bg);
+      border: 1px solid var(--cinza-borda);
+      border-radius: var(--radius-lg);
+      padding: 2rem 1.75rem;
+      transition: transform .25s, box-shadow .25s, border-color .25s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .servico-card::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--azul-claro);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform .3s;
+    }
+
+    .servico-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--azul-brilho);
+    }
+
+    .servico-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .servico-icon {
+      width: 52px;
+      height: 52px;
+      background: rgba(37, 99, 235, .1);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.25rem;
+    }
+
+    .servico-icon svg {
+      width: 26px;
+      height: 26px;
+      stroke: var(--azul-claro);
+      fill: none;
+      stroke-width: 1.75;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .servico-card h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--azul);
+      margin-bottom: .5rem;
+    }
+
+    .servico-card p {
+      font-size: .875rem;
+      color: var(--texto-muted);
+      line-height: 1.65;
+    }
+
+    /* ─── COBERTURA ─── */
+    #cobertura {
+      background: var(--cinza-bg);
+    }
+
+    .cobertura-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .cobertura-mapa {
+      background: var(--azul);
+      border-radius: var(--radius-lg);
+      padding: 2.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cobertura-mapa::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 60% 50%, rgba(37, 99, 235, .2) 0%, transparent 70%);
+    }
+
+    .mapa-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 280px;
+      position: relative;
+      z-index: 2;
+      text-align: center;
+    }
+
+    .mapa-placeholder svg {
+      width: 80px;
+      height: 80px;
+      opacity: .3;
+      fill: white;
+      margin-bottom: 1rem;
+    }
+
+    .mapa-placeholder p {
+      color: rgba(255, 255, 255, .4);
+      font-size: .875rem;
+    }
+
+    .cobertura-regioes h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--azul);
+      margin-bottom: 1rem;
+    }
+
+    .cobertura-lista {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: .6rem;
+    }
+
+    .cobertura-lista li {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      background: white;
+      border: 1px solid var(--cinza-borda);
+      border-radius: var(--radius);
+      padding: .75rem 1rem;
+      font-size: .9rem;
+      color: var(--texto);
+    }
+
+    .cobertura-lista li svg {
+      width: 16px;
+      height: 16px;
+      stroke: var(--azul-claro);
+      fill: none;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      flex-shrink: 0;
+    }
+
+    /* ─── DEPOIMENTOS ─── */
+    #depoimentos {
+      background: white;
+    }
+
+    .depoimentos-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .depoimento-card {
+      background: var(--cinza-bg);
+      border: 1px solid var(--cinza-borda);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem;
+      transition: transform .25s, box-shadow .25s;
+    }
+
+    .depoimento-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow);
+    }
+
+    .estrelas {
+      display: flex;
+      gap: 3px;
+      margin-bottom: 1rem;
+    }
+
+    .estrelas svg {
+      width: 16px;
+      height: 16px;
+      fill: #f59e0b;
+    }
+
+    .depoimento-texto {
+      font-size: .9rem;
+      color: var(--texto-muted);
+      line-height: 1.7;
+      margin-bottom: 1.25rem;
+      font-style: italic;
+    }
+
+    .depoimento-autor {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+    }
+
+    .autor-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--azul-medio);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Syne', sans-serif;
+      font-size: .9rem;
+      font-weight: 700;
+      color: white;
+    }
+
+    .autor-nome {
+      font-weight: 600;
+      font-size: .875rem;
+      color: var(--azul);
+    }
+
+    .autor-empresa {
+      font-size: .78rem;
+      color: var(--texto-muted);
+    }
+
+    /* ─── COTAÇÃO ─── */
+    #cotacao {
+      background: var(--azul);
+    }
+
+    #cotacao .section-label {
+      color: #93c5fd;
+      background: rgba(147, 197, 253, .1);
+      border-color: rgba(147, 197, 253, .2);
+    }
+
+    #cotacao .section-title {
+      color: white;
+    }
+
+    #cotacao .section-sub {
+      color: rgba(255, 255, 255, .6);
+    }
+
+    .cotacao-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .cotacao-info p {
+      color: rgba(255, 255, 255, .65);
+      font-size: .95rem;
+      line-height: 1.75;
+      margin-bottom: 2rem;
+    }
+
+    .cotacao-contatos {
+      display: flex;
+      flex-direction: column;
+      gap: .75rem;
+    }
+
+    .contato-item {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      color: rgba(255, 255, 255, .7);
+      font-size: .9rem;
+    }
+
+    .contato-item svg {
+      width: 18px;
+      height: 18px;
+      stroke: var(--laranja);
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .form-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 2.5rem;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+
+    .form-group.full {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      display: block;
+      font-size: .8rem;
+      font-weight: 500;
+      color: var(--texto-muted);
+      margin-bottom: .4rem;
+      letter-spacing: .02em;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      padding: .7rem .9rem;
+      border: 1.5px solid var(--cinza-borda);
+      border-radius: var(--radius);
+      font-family: 'DM Sans', sans-serif;
+      font-size: .9rem;
+      color: var(--texto);
+      background: var(--cinza-bg);
+      transition: border-color .2s, box-shadow .2s;
+      outline: none;
+      appearance: none;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--azul-claro);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, .1);
+      background: white;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 90px;
+    }
+
+    /* Honeypot */
+    .hp-field {
+      display: none !important;
+    }
+
+    .form-actions {
+      display: flex;
+      flex-direction: column;
+      gap: .75rem;
+      margin-top: 1.5rem;
+    }
+
+    .btn-form {
+      width: 100%;
+      padding: .9rem;
+      background: var(--azul-claro);
+      color: white;
+      border: none;
+      border-radius: var(--radius);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background .2s, transform .15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-form:hover {
+      background: var(--azul);
+      transform: translateY(-2px);
+    }
+
+    .btn-form:disabled {
+      opacity: .6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-wpp {
+      width: 100%;
+      padding: .85rem;
+      background: #25d366;
+      color: white;
+      border: none;
+      border-radius: var(--radius);
+      font-family: 'DM Sans', sans-serif;
+      font-size: .95rem;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background .2s, transform .15s;
+    }
+
+    .btn-wpp:hover {
+      background: #128c5e;
+      transform: translateY(-2px);
+    }
+
+    .form-msg {
+      padding: .75rem 1rem;
+      border-radius: var(--radius);
+      font-size: .875rem;
+      display: none;
+      margin-top: .5rem;
+    }
+
+    .form-msg.success {
+      background: #ecfdf5;
+      color: #065f46;
+      border: 1px solid #6ee7b7;
+      display: block;
+    }
+
+    .form-msg.error {
+      background: #fef2f2;
+      color: #991b1b;
+      border: 1px solid #fca5a5;
+      display: block;
+    }
+
+    /* ─── FAQ ─── */
+    #faq {
+      background: var(--cinza-bg);
+    }
+
+    .faq-list {
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    .faq-item {
+      background: white;
+      border: 1px solid var(--cinza-borda);
+      border-radius: var(--radius);
+      margin-bottom: .75rem;
+      overflow: hidden;
+    }
+
+    .faq-q {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.25rem 1.5rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      font-size: .95rem;
+      font-weight: 500;
+      color: var(--azul);
+      text-align: left;
+      gap: 1rem;
+    }
+
+    .faq-q svg {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+      stroke: var(--azul-claro);
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      transition: transform .3s;
+    }
+
+    .faq-item.open .faq-q svg {
+      transform: rotate(180deg);
+    }
+
+    .faq-a {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height .35s ease;
+    }
+
+    .faq-a-inner {
+      padding: 0 1.5rem 1.25rem;
+      font-size: .9rem;
+      color: var(--texto-muted);
+      line-height: 1.75;
+    }
+
+    /* ─── RODAPÉ ─── */
+    footer {
+      background: #080f1a;
+      color: rgba(255, 255, 255, .6);
+      padding: 60px 5% 30px;
+    }
+
+    .footer-grid {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 3rem;
+      margin-bottom: 3rem;
+    }
+
+    .footer-brand p {
+      font-size: .875rem;
+      line-height: 1.7;
+      margin-top: 1rem;
+      max-width: 280px;
+    }
+
+    .footer-col h4 {
+      font-family: 'Syne', sans-serif;
+      font-size: .875rem;
+      font-weight: 600;
+      color: white;
+      margin-bottom: 1rem;
+      letter-spacing: .04em;
+    }
+
+    .footer-col ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: .5rem;
+    }
+
+    .footer-col ul li a {
+      color: rgba(255, 255, 255, .5);
+      text-decoration: none;
+      font-size: .85rem;
+      transition: color .2s;
+    }
+
+    .footer-col ul li a:hover {
+      color: white;
+    }
+
+    .footer-socials {
+      display: flex;
+      gap: .75rem;
+      margin-top: 1.25rem;
+    }
+
+    .social-btn {
+      width: 38px;
+      height: 38px;
+      background: rgba(255, 255, 255, .07);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      transition: background .2s;
+    }
+
+    .social-btn:hover {
+      background: var(--azul-claro);
+    }
+
+    .social-btn svg {
+      width: 16px;
+      height: 16px;
+      fill: rgba(255, 255, 255, .7);
+    }
+
+    .footer-bottom {
+      max-width: 1100px;
+      margin: 0 auto;
+      border-top: 1px solid rgba(255, 255, 255, .07);
+      padding-top: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: .8rem;
+    }
+
+    /* ─── WHATSAPP FLUTUANTE ─── */
+    .wpp-float {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      z-index: 200;
+      width: 56px;
+      height: 56px;
+      background: #25d366;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 20px rgba(37, 211, 102, .4);
+      text-decoration: none;
+      transition: transform .2s, box-shadow .2s;
+      animation: wpp-pulse 2.5s infinite;
+    }
+
+    .wpp-float:hover {
+      transform: scale(1.12);
+      box-shadow: 0 6px 28px rgba(37, 211, 102, .55);
+    }
+
+    .wpp-float svg {
+      width: 30px;
+      height: 30px;
+      fill: white;
+    }
+
+    @keyframes wpp-pulse {
+
+      0%,
+      100% {
+        box-shadow: 0 4px 20px rgba(37, 211, 102, .4);
+      }
+
+      50% {
+        box-shadow: 0 4px 20px rgba(37, 211, 102, .4), 0 0 0 10px rgba(37, 211, 102, .12);
+      }
+    }
+
+    /* ─── ANIMAÇÕES SCROLL ─── */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity .6s ease, transform .6s ease;
+    }
+
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ─── RESPONSIVO ─── */
+    @media (max-width: 900px) {
+      .nav-links {
+        display: none;
+      }
+
+      .hamburger {
+        display: flex;
+      }
+
+      .hero-inner {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 2.5rem;
+      }
+
+      .hero-btns {
+        justify-content: center;
+      }
+
+      .hero-stats {
+        justify-content: center;
+      }
+
+      .hero-visual {
+        display: none;
+      }
+
+      .sobre-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .servicos-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .cobertura-inner {
+        grid-template-columns: 1fr;
+      }
+
+      .depoimentos-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .cotacao-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 600px) {
+      section {
+        padding: 60px 5%;
+      }
+
+      .servicos-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+
+      .sobre-diferenciais {
+        grid-template-columns: 1fr;
+      }
+
+      .sobre-numeros {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        gap: .5rem;
+        text-align: center;
+      }
+
+      .hero-stats {
+        flex-direction: column;
+        gap: 1rem;
+      }
+    }
+  </style>
 </head>
+
 <body>
 
-<!-- NAVBAR -->
-<nav id="navbar">
-  <a href="#hero" class="nav-logo" aria-label="Ir para o início">
-    <div class="nav-logo-icon" aria-hidden="true">
-      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5S5.17 15.5 6 15.5s1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
-    </div>
-    <span class="nav-logo-text">Transporta<span>Certa</span></span>
-  </a>
-
-  <ul class="nav-links">
-    <li><a href="#sobre">Sobre</a></li>
-    <li><a href="#servicos">Serviços</a></li>
-    <li><a href="#cobertura">Cobertura</a></li>
-    <li><a href="#depoimentos">Depoimentos</a></li>
-    <li><a href="#faq">FAQ</a></li>
-    <li><a href="#cotacao" class="nav-cta">Solicitar Cotação</a></li>
-  </ul>
-
-  <button class="hamburger" id="hamburger" aria-label="Abrir menu" aria-expanded="false">
-    <span></span><span></span><span></span>
-  </button>
-</nav>
-
-<div class="mobile-menu" id="mobile-menu" role="navigation" aria-label="Menu mobile">
-  <a href="#sobre" class="mobile-link">Sobre</a>
-  <a href="#servicos" class="mobile-link">Serviços</a>
-  <a href="#cobertura" class="mobile-link">Cobertura</a>
-  <a href="#depoimentos" class="mobile-link">Depoimentos</a>
-  <a href="#faq" class="mobile-link">FAQ</a>
-  <a href="#cotacao" class="mobile-link m-cta">Solicitar Cotação</a>
-</div>
-
-<!-- HERO -->
-<section id="hero" aria-label="Início">
-  <div class="hero-grid" aria-hidden="true"></div>
-  <div class="hero-circle c1" aria-hidden="true"></div>
-  <div class="hero-circle c2" aria-hidden="true"></div>
-
-  <div class="hero-inner">
-    <div class="hero-content">
-      <div class="hero-badge" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.09 3.26L16.18 4l-1.64 2.91L18 8l-3.26 1.09L16 12l-2.91-1.64L12 14l-1.09-3.26L7.82 12l1.64-2.91L6 8l3.26-1.09L8 5l2.91 1.64z"/></svg>
-        Transportes de Confiança
-      </div>
-
-      <h1 class="hero-title">
-        Sua carga entregue<br>com <span>pontualidade</span><br>e segurança
-      </h1>
-
-      <p class="hero-sub">
-        Soluções completas em transporte para empresas e pessoas físicas. Atendemos rotas locais, intermunicipais e muito mais — com rastreamento em tempo real.
-      </p>
-
-      <div class="hero-btns">
-        <a href="#cotacao" class="btn-primary" aria-label="Solicitar cotação">
-          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414A1 1 0 0121 9.414V19a2 2 0 01-2 2z"/></svg>
-          Solicitar Cotação
-        </a>
-        <a href="#whatsapp-link" class="btn-secondary" aria-label="Falar pelo WhatsApp">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.117.553 4.099 1.519 5.819L0 24l6.335-1.483A11.944 11.944 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.015-1.375l-.36-.214-3.726.872.937-3.63-.235-.374A9.818 9.818 0 112 12a9.819 9.819 0 0110 9.818z"/></svg>
-          Falar pelo WhatsApp
-        </a>
-      </div>
-
-      <div class="hero-stats" aria-label="Números da empresa">
-        <div class="stat-item">
-          <div class="stat-num">8<span>+</span></div>
-          <div class="stat-label">Anos de experiência</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-num">12<span>k</span></div>
-          <div class="stat-label">Entregas realizadas</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-num">98<span>%</span></div>
-          <div class="stat-label">Satisfação dos clientes</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="hero-visual" aria-hidden="true">
-      <div class="hero-truck-wrap">
-        <svg class="hero-truck-svg" viewBox="0 0 460 320" xmlns="http://www.w3.org/2000/svg">
-          <!-- Estrada -->
-          <rect x="0" y="270" width="460" height="50" rx="0" fill="#0d1f38"/>
-          <rect x="0" y="274" width="460" height="4" fill="#1a3a6e" opacity=".6"/>
-          <!-- Linha tracejada estrada -->
-          <rect x="30" y="290" width="60" height="4" rx="2" fill="rgba(255,255,255,.15)"/>
-          <rect x="130" y="290" width="60" height="4" rx="2" fill="rgba(255,255,255,.15)"/>
-          <rect x="230" y="290" width="60" height="4" rx="2" fill="rgba(255,255,255,.15)"/>
-          <rect x="330" y="290" width="60" height="4" rx="2" fill="rgba(255,255,255,.15)"/>
-          <!-- Baú do caminhão -->
-          <rect x="20" y="140" width="280" height="130" rx="10" fill="#1a4a8a"/>
-          <rect x="20" y="140" width="280" height="12" rx="6" fill="#1e5296"/>
-          <!-- Detalhe lateral baú -->
-          <rect x="30" y="162" width="260" height="2" fill="rgba(255,255,255,.08)"/>
-          <rect x="30" y="202" width="260" height="2" fill="rgba(255,255,255,.08)"/>
-          <rect x="30" y="242" width="260" height="2" fill="rgba(255,255,255,.08)"/>
-          <!-- Logo no baú -->
-          <rect x="100" y="175" width="120" height="50" rx="6" fill="rgba(255,255,255,.06)"/>
-          <text x="160" y="207" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="700" fill="rgba(255,255,255,.35)" letter-spacing="1">TRANSPORTACERTA</text>
-          <!-- Cabine -->
-          <rect x="300" y="175" width="140" height="95" rx="10" fill="#0f2744"/>
-          <rect x="300" y="175" width="140" height="10" rx="5" fill="#122f52"/>
-          <!-- Para-brisa -->
-          <rect x="310" y="188" width="95" height="60" rx="6" fill="#1a6fa8" opacity=".7"/>
-          <line x1="360" y1="188" x2="360" y2="248" stroke="rgba(255,255,255,.15)" stroke-width="1.5"/>
-          <!-- Porta -->
-          <rect x="315" y="255" width="50" height="15" rx="3" fill="#0c1e36"/>
-          <rect x="360" y="255" width="70" height="15" rx="3" fill="#0c1e36"/>
-          <!-- Farol -->
-          <rect x="428" y="200" width="22" height="14" rx="4" fill="#fef3c7" opacity=".9"/>
-          <rect x="428" y="218" width="22" height="8" rx="3" fill="#e85d04" opacity=".8"/>
-          <!-- Espelho -->
-          <rect x="423" y="190" width="10" height="16" rx="3" fill="#1a3a6e"/>
-          <!-- Chassi -->
-          <rect x="20" y="266" width="420" height="10" rx="3" fill="#0c1e36"/>
-          <!-- Rodas -->
-          <circle cx="90" cy="275" r="26" fill="#0c1e36"/>
-          <circle cx="90" cy="275" r="18" fill="#1a2e4a"/>
-          <circle cx="90" cy="275" r="8" fill="#2563eb"/>
-          <circle cx="230" cy="275" r="26" fill="#0c1e36"/>
-          <circle cx="230" cy="275" r="18" fill="#1a2e4a"/>
-          <circle cx="230" cy="275" r="8" fill="#2563eb"/>
-          <circle cx="360" cy="275" r="26" fill="#0c1e36"/>
-          <circle cx="360" cy="275" r="18" fill="#1a2e4a"/>
-          <circle cx="360" cy="275" r="8" fill="#2563eb"/>
-          <!-- Detalhe laranja cabine -->
-          <rect x="300" y="265" width="140" height="5" rx="2" fill="#e85d04"/>
-          <!-- Antena -->
-          <line x1="420" y1="175" x2="420" y2="145" stroke="rgba(255,255,255,.3)" stroke-width="2"/>
-          <circle cx="420" cy="143" r="3" fill="#e85d04"/>
+  <!-- NAVBAR -->
+  <nav id="navbar">
+    <a href="#hero" class="nav-logo" aria-label="Ir para o início">
+      <div class="nav-logo-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5S5.17 15.5 6 15.5s1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z" />
         </svg>
+      </div>
+      <span class="nav-logo-text">Transporta<span>Certa</span></span>
+    </a>
 
-        <!-- Cards flutuantes -->
-        <div class="hero-card c1">
-          <div class="hero-card-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+    <ul class="nav-links">
+      <li><a href="#sobre">Sobre</a></li>
+      <li><a href="#servicos">Serviços</a></li>
+      <li><a href="#cobertura">Cobertura</a></li>
+      <li><a href="#depoimentos">Depoimentos</a></li>
+      <li><a href="#faq">FAQ</a></li>
+      <li><a href="#cotacao" class="nav-cta">Solicitar Cotação</a></li>
+    </ul>
+
+    <button class="hamburger" id="hamburger" aria-label="Abrir menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <div class="mobile-menu" id="mobile-menu" role="navigation" aria-label="Menu mobile">
+    <a href="#sobre" class="mobile-link">Sobre</a>
+    <a href="#servicos" class="mobile-link">Serviços</a>
+    <a href="#cobertura" class="mobile-link">Cobertura</a>
+    <a href="#depoimentos" class="mobile-link">Depoimentos</a>
+    <a href="#faq" class="mobile-link">FAQ</a>
+    <a href="#cotacao" class="mobile-link m-cta">Solicitar Cotação</a>
+  </div>
+
+  <!-- HERO -->
+  <section id="hero" aria-label="Início">
+    <div class="hero-grid" aria-hidden="true"></div>
+    <div class="hero-circle c1" aria-hidden="true"></div>
+    <div class="hero-circle c2" aria-hidden="true"></div>
+
+    <div class="hero-inner">
+      <div class="hero-content">
+        <div class="hero-badge" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M12 2l1.09 3.26L16.18 4l-1.64 2.91L18 8l-3.26 1.09L16 12l-2.91-1.64L12 14l-1.09-3.26L7.82 12l1.64-2.91L6 8l3.26-1.09L8 5l2.91 1.64z" />
+          </svg>
+          Transportes de Confiança
+        </div>
+
+        <h1 class="hero-title">
+          Sua carga entregue<br>com <span>pontualidade</span><br>e segurança
+        </h1>
+
+        <p class="hero-sub">
+          Soluções completas em transporte para empresas e pessoas físicas. Atendemos rotas locais, intermunicipais e
+          muito mais — com rastreamento em tempo real.
+        </p>
+
+        <div class="hero-btns">
+          <a href="#cotacao" class="btn-primary" aria-label="Solicitar cotação">
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414A1 1 0 0121 9.414V19a2 2 0 01-2 2z" />
+            </svg>
+            Solicitar Cotação
+          </a>
+          <a id="whatsapp-hero-btn" href="#" class="btn-secondary" target="_blank" rel="noopener noreferrer" aria-label="Falar pelo WhatsApp">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path
+                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
+              <path
+                d="M12 0C5.373 0 0 5.373 0 12c0 2.117.553 4.099 1.519 5.819L0 24l6.335-1.483A11.944 11.944 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.015-1.375l-.36-.214-3.726.872.937-3.63-.235-.374A9.818 9.818 0 112 12a9.819 9.819 0 0110 9.818z" />
+            </svg>
+            Falar pelo WhatsApp
+          </a>
+        </div>
+
+        <div class="hero-stats" aria-label="Números da empresa">
+          <div class="stat-item">
+            <div class="stat-num">8<span>+</span></div>
+            <div class="stat-label">Anos de experiência</div>
           </div>
-          <div>
-            <div class="hero-card-title">Entrega confirmada</div>
-            <div class="hero-card-sub">São Leopoldo → Porto Alegre</div>
+          <div class="stat-item">
+            <div class="stat-num">12<span>k</span></div>
+            <div class="stat-label">Entregas realizadas</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num">98<span>%</span></div>
+            <div class="stat-label">Satisfação dos clientes</div>
           </div>
         </div>
-        <div class="hero-card c2">
-          <div class="hero-card-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+      </div>
+
+      <div class="hero-visual" aria-hidden="true">
+        <div class="hero-truck-wrap">
+          <svg class="hero-truck-svg" viewBox="0 0 460 320" xmlns="http://www.w3.org/2000/svg">
+            <!-- Estrada -->
+            <rect x="0" y="270" width="460" height="50" rx="0" fill="#0d1f38" />
+            <rect x="0" y="274" width="460" height="4" fill="#1a3a6e" opacity=".6" />
+            <!-- Linha tracejada estrada -->
+            <rect x="30" y="290" width="60" height="4" rx="2" fill="rgba(255,255,255,.15)" />
+            <rect x="130" y="290" width="60" height="4" rx="2" fill="rgba(255,255,255,.15)" />
+            <rect x="230" y="290" width="60" height="4" rx="2" fill="rgba(255,255,255,.15)" />
+            <rect x="330" y="290" width="60" height="4" rx="2" fill="rgba(255,255,255,.15)" />
+            <!-- Baú do caminhão -->
+            <rect x="20" y="140" width="280" height="130" rx="10" fill="#1a4a8a" />
+            <rect x="20" y="140" width="280" height="12" rx="6" fill="#1e5296" />
+            <!-- Detalhe lateral baú -->
+            <rect x="30" y="162" width="260" height="2" fill="rgba(255,255,255,.08)" />
+            <rect x="30" y="202" width="260" height="2" fill="rgba(255,255,255,.08)" />
+            <rect x="30" y="242" width="260" height="2" fill="rgba(255,255,255,.08)" />
+            <!-- Logo no baú -->
+            <rect x="100" y="175" width="120" height="50" rx="6" fill="rgba(255,255,255,.06)" />
+            <text x="160" y="207" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="700"
+              fill="rgba(255,255,255,.35)" letter-spacing="1">TRANSPORTACERTA</text>
+            <!-- Cabine -->
+            <rect x="300" y="175" width="140" height="95" rx="10" fill="#0f2744" />
+            <rect x="300" y="175" width="140" height="10" rx="5" fill="#122f52" />
+            <!-- Para-brisa -->
+            <rect x="310" y="188" width="95" height="60" rx="6" fill="#1a6fa8" opacity=".7" />
+            <line x1="360" y1="188" x2="360" y2="248" stroke="rgba(255,255,255,.15)" stroke-width="1.5" />
+            <!-- Porta -->
+            <rect x="315" y="255" width="50" height="15" rx="3" fill="#0c1e36" />
+            <rect x="360" y="255" width="70" height="15" rx="3" fill="#0c1e36" />
+            <!-- Farol -->
+            <rect x="428" y="200" width="22" height="14" rx="4" fill="#fef3c7" opacity=".9" />
+            <rect x="428" y="218" width="22" height="8" rx="3" fill="#e85d04" opacity=".8" />
+            <!-- Espelho -->
+            <rect x="423" y="190" width="10" height="16" rx="3" fill="#1a3a6e" />
+            <!-- Chassi -->
+            <rect x="20" y="266" width="420" height="10" rx="3" fill="#0c1e36" />
+            <!-- Rodas -->
+            <circle cx="90" cy="275" r="26" fill="#0c1e36" />
+            <circle cx="90" cy="275" r="18" fill="#1a2e4a" />
+            <circle cx="90" cy="275" r="8" fill="#2563eb" />
+            <circle cx="230" cy="275" r="26" fill="#0c1e36" />
+            <circle cx="230" cy="275" r="18" fill="#1a2e4a" />
+            <circle cx="230" cy="275" r="8" fill="#2563eb" />
+            <circle cx="360" cy="275" r="26" fill="#0c1e36" />
+            <circle cx="360" cy="275" r="18" fill="#1a2e4a" />
+            <circle cx="360" cy="275" r="8" fill="#2563eb" />
+            <!-- Detalhe laranja cabine -->
+            <rect x="300" y="265" width="140" height="5" rx="2" fill="#e85d04" />
+            <!-- Antena -->
+            <line x1="420" y1="175" x2="420" y2="145" stroke="rgba(255,255,255,.3)" stroke-width="2" />
+            <circle cx="420" cy="143" r="3" fill="#e85d04" />
+          </svg>
+
+          <!-- Cards flutuantes -->
+          <div class="hero-card c1">
+            <div class="hero-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round">
+                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <div>
+              <div class="hero-card-title">Entrega confirmada</div>
+              <div class="hero-card-sub">São Leopoldo → Porto Alegre</div>
+            </div>
           </div>
-          <div>
-            <div class="hero-card-title">Rastreamento ativo</div>
-            <div class="hero-card-sub">Atualizado agora</div>
+          <div class="hero-card c2">
+            <div class="hero-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round">
+                <path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                <path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+            </div>
+            <div>
+              <div class="hero-card-title">Rastreamento ativo</div>
+              <div class="hero-card-sub">Atualizado agora</div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- SOBRE -->
-<section id="sobre">
-  <div class="section-inner">
-    <div class="sobre-grid">
-      <div class="sobre-texto fade-up">
-        <span class="section-label">Sobre nós</span>
-        <h2 class="section-title">Comprometidos com cada quilômetro da sua carga</h2>
-        <p>Somos uma transportadora com anos de estrada, construída sobre a base da confiança e da responsabilidade. Atendemos empresas e clientes pessoa física com a mesma dedicação — seja uma caixa ou um caminhão cheio.</p>
-        <p>Nossa frota é mantida regularmente, nossa equipe é treinada e nossos processos são pensados para garantir que a sua carga chegue no prazo, intacta e com total transparência.</p>
+  <!-- SOBRE -->
+  <section id="sobre">
+    <div class="section-inner">
+      <div class="sobre-grid">
+        <div class="sobre-texto fade-up">
+          <span class="section-label">Sobre nós</span>
+          <h2 class="section-title">Comprometidos com cada quilômetro da sua carga</h2>
+          <p>Somos uma transportadora com anos de estrada, construída sobre a base da confiança e da responsabilidade.
+            Atendemos empresas e clientes pessoa física com a mesma dedicação — seja uma caixa ou um caminhão cheio.</p>
+          <p>Nossa frota é mantida regularmente, nossa equipe é treinada e nossos processos são pensados para garantir
+            que a sua carga chegue no prazo, intacta e com total transparência.</p>
 
-        <div class="sobre-diferenciais">
-          <div class="diferencial-card fade-up">
-            <div class="diferencial-icon">
-              <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <div class="sobre-diferenciais">
+            <div class="diferencial-card fade-up">
+              <div class="diferencial-icon">
+                <svg viewBox="0 0 24 24">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                </svg>
+              </div>
+              <h4>Carga Segurada</h4>
+              <p>Seguro para todos os tipos de transporte, do menor ao maior volume.</p>
             </div>
-            <h4>Carga Segurada</h4>
-            <p>Seguro para todos os tipos de transporte, do menor ao maior volume.</p>
+            <div class="diferencial-card fade-up">
+              <div class="diferencial-icon">
+                <svg viewBox="0 0 24 24">
+                  <circle cx="12" cy="12" r="10" />
+                  <polyline points="12 6 12 12 16 14" />
+                </svg>
+              </div>
+              <h4>Pontualidade</h4>
+              <p>Comprometidos com os prazos combinados desde o primeiro contato.</p>
+            </div>
+            <div class="diferencial-card fade-up">
+              <div class="diferencial-icon">
+                <svg viewBox="0 0 24 24">
+                  <path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                  <path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+              </div>
+              <h4>Rastreamento</h4>
+              <p>Acompanhe sua carga em tempo real pelo celular ou computador.</p>
+            </div>
+            <div class="diferencial-card fade-up">
+              <div class="diferencial-icon">
+                <svg viewBox="0 0 24 24">
+                  <path
+                    d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.67A2 2 0 012 .82h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z" />
+                </svg>
+              </div>
+              <h4>Suporte Ágil</h4>
+              <p>Nossa equipe responde rápido via WhatsApp, telefone ou e-mail.</p>
+            </div>
           </div>
-          <div class="diferencial-card fade-up">
-            <div class="diferencial-icon">
-              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+
+        <div class="fade-up">
+          <div class="sobre-numeros" aria-label="Números da empresa">
+            <div class="num-item">
+              <div class="num-val">8<span>+</span></div>
+              <div class="num-label">Anos no mercado</div>
             </div>
-            <h4>Pontualidade</h4>
-            <p>Comprometidos com os prazos combinados desde o primeiro contato.</p>
-          </div>
-          <div class="diferencial-card fade-up">
-            <div class="diferencial-icon">
-              <svg viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            <div class="num-item">
+              <div class="num-val">12<span>k</span></div>
+              <div class="num-label">Entregas realizadas</div>
             </div>
-            <h4>Rastreamento</h4>
-            <p>Acompanhe sua carga em tempo real pelo celular ou computador.</p>
-          </div>
-          <div class="diferencial-card fade-up">
-            <div class="diferencial-icon">
-              <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.67A2 2 0 012 .82h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+            <div class="num-item">
+              <div class="num-val">3<span>k</span></div>
+              <div class="num-label">Clientes ativos</div>
             </div>
-            <h4>Suporte Ágil</h4>
-            <p>Nossa equipe responde rápido via WhatsApp, telefone ou e-mail.</p>
+            <div class="num-item">
+              <div class="num-val">15<span>+</span></div>
+              <div class="num-label">Cidades atendidas</div>
+            </div>
           </div>
         </div>
       </div>
+    </div>
+  </section>
 
+  <!-- SERVIÇOS -->
+  <section id="servicos">
+    <div class="section-inner">
       <div class="fade-up">
-        <div class="sobre-numeros" aria-label="Números da empresa">
-          <div class="num-item">
-            <div class="num-val">8<span>+</span></div>
-            <div class="num-label">Anos no mercado</div>
+        <span class="section-label">O que fazemos</span>
+        <h2 class="section-title">Serviços completos de transporte</h2>
+        <p class="section-sub">Do encomenda expressa ao frete de mudança — temos a solução certa para cada necessidade
+          da sua empresa ou família.</p>
+      </div>
+
+      <div class="servicos-grid">
+        <div class="servico-card fade-up">
+          <div class="servico-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M3 3h18v13H3zM8 21h8M12 16v5" />
+            </svg>
           </div>
-          <div class="num-item">
-            <div class="num-val">12<span>k</span></div>
-            <div class="num-label">Entregas realizadas</div>
+          <h3>Entregas Locais</h3>
+          <p>Coleta e entrega ágil dentro da mesma cidade. Ideal para comércios, e-commerces e pessoas físicas com
+            necessidade de rapidez.</p>
+        </div>
+
+        <div class="servico-card fade-up">
+          <div class="servico-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path
+                d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4z" />
+            </svg>
           </div>
-          <div class="num-item">
-            <div class="num-val">3<span>k</span></div>
-            <div class="num-label">Clientes ativos</div>
+          <h3>Entregas Intermunicipais</h3>
+          <p>Rotas entre municípios com planejamento de percurso e cumprimento rigoroso de prazos. Sua carga vai onde
+            precisa chegar.</p>
+        </div>
+
+        <div class="servico-card fade-up">
+          <div class="servico-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <rect x="2" y="7" width="20" height="14" rx="2" />
+              <path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2M12 12v4M10 14h4" />
+            </svg>
           </div>
-          <div class="num-item">
-            <div class="num-val">15<span>+</span></div>
-            <div class="num-label">Cidades atendidas</div>
+          <h3>Cargas Fracionadas</h3>
+          <p>Não precisa lotar um caminhão inteiro. Transportamos volumes menores com o mesmo cuidado e eficiência,
+            dividindo o custo com outros clientes.</p>
+        </div>
+
+        <div class="servico-card fade-up">
+          <div class="servico-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
+              <line x1="3" y1="6" x2="21" y2="6" />
+              <path d="M16 10a4 4 0 01-8 0" />
+            </svg>
+          </div>
+          <h3>E-commerce & Distribuição</h3>
+          <p>Parceiro ideal para lojas virtuais: coleta frequente, roteirização eficiente e entrega no prazo para que
+            seu cliente fique satisfeito.</p>
+        </div>
+
+        <div class="servico-card fade-up">
+          <div class="servico-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M8 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-3" />
+              <polyline points="15 3 21 3 21 9" />
+              <line x1="10" y1="14" x2="21" y2="3" />
+            </svg>
+          </div>
+          <h3>Transporte Refrigerado</h3>
+          <p>Veículos com câmara fria para cargas que exigem controle de temperatura: alimentos, produtos farmacêuticos
+            e outros itens sensíveis.</p>
+        </div>
+
+        <div class="servico-card fade-up">
+          <div class="servico-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+              <polyline points="9 22 9 12 15 12 15 22" />
+            </svg>
+          </div>
+          <h3>Fretes de Mudança</h3>
+          <p>Mudanças residenciais e comerciais com equipe especializada no manuseio de móveis e objetos delicados. Você
+            muda, a gente cuida.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COBERTURA -->
+  <section id="cobertura">
+    <div class="section-inner">
+      <div class="fade-up">
+        <span class="section-label">Onde atuamos</span>
+        <h2 class="section-title">Área de cobertura</h2>
+        <p class="section-sub">Atendemos uma ampla região com rotas planejadas para máxima eficiência e menor custo para
+          você.</p>
+      </div>
+
+      <div class="cobertura-inner fade-up">
+        <div class="cobertura-mapa" aria-label="Ilustração de mapa de cobertura">
+          <div class="mapa-placeholder">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+            </svg>
+            <p>Mapa da região atendida<br>(inserir mapa real aqui)</p>
+          </div>
+        </div>
+
+        <div class="cobertura-regioes">
+          <h3>Cidades e regiões atendidas</h3>
+          <ul class="cobertura-lista" aria-label="Lista de cidades atendidas">
+            <li>
+              <svg viewBox="0 0 24 24">
+                <path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                <path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              Porto Alegre e Grande Porto Alegre
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24">
+                <path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                <path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              Vale do Rio dos Sinos (São Leopoldo, Novo Hamburgo)
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24">
+                <path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                <path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              Serra Gaúcha (Caxias do Sul, Gramado, Canela)
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24">
+                <path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                <path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              Região Metropolitana Sul (Pelotas, Rio Grande)
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24">
+                <path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                <path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              Interior do Rio Grande do Sul (sob consulta)
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DEPOIMENTOS -->
+  <section id="depoimentos">
+    <div class="section-inner">
+      <div class="fade-up" style="text-align:center;">
+        <span class="section-label">O que dizem</span>
+        <h2 class="section-title">Clientes que confiam em nós</h2>
+        <p class="section-sub" style="margin: 0 auto 3rem;">A nossa maior conquista é a satisfação de quem escolhe a
+          TransportaCerta todos os dias.</p>
+      </div>
+
+      <div class="depoimentos-grid">
+        <div class="depoimento-card fade-up">
+          <div class="estrelas" aria-label="5 estrelas">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+            </svg>
+            <svg viewBox="0 0 24 24">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+            </svg>
+            <svg viewBox="0 0 24 24">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+            </svg>
+            <svg viewBox="0 0 24 24">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+            </svg>
+            <svg viewBox="0 0 24 24">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+            </svg>
+          </div>
+          <p class="depoimento-texto">"Utilizamos a TransportaCerta para a distribuição do nosso e-commerce há mais de
+            dois anos. Nunca tivemos atrasos significativos e o atendimento é sempre rápido e prestativo."</p>
+          <div class="depoimento-autor">
+            <div class="autor-avatar" aria-hidden="true">CR</div>
+            <div>
+              <div class="autor-nome">Carlos Ramos</div>
+              <div class="autor-empresa">Loja Ativa Online</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="depoimento-card fade-up">
+          <div class="estrelas" aria-label="5 estrelas">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+            </svg>
+            <svg viewBox="0 0 24 24">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+            </svg>
+            <svg viewBox="0 0 24 24">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+            </svg>
+            <svg viewBox="0 0 24 24">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+            </svg>
+            <svg viewBox="0 0 24 24">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+            </svg>
+          </div>
+          <p class="depoimento-texto">"Contratei para uma mudança intermunicipal e fiquei surpresa com o cuidado com os
+            móveis. Nada quebrado, tudo no prazo e a equipe super educada. Recomendo muito!"</p>
+          <div class="depoimento-autor">
+            <div class="autor-avatar" aria-hidden="true">AP</div>
+            <div>
+              <div class="autor-nome">Ana Paula Ferreira</div>
+              <div class="autor-empresa">Cliente Pessoa Física</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="depoimento-card fade-up">
+          <div class="estrelas" aria-label="5 estrelas">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+            </svg>
+            <svg viewBox="0 0 24 24">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+            </svg>
+            <svg viewBox="0 0 24 24">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+            </svg>
+            <svg viewBox="0 0 24 24">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+            </svg>
+            <svg viewBox="0 0 24 24">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+            </svg>
+          </div>
+          <p class="depoimento-texto">"Nossa indústria precisa de transporte refrigerado confiável. A TransportaCerta
+            entende isso e garante a cadeia de frio com rastreamento constante. Parceria sólida há 3 anos."</p>
+          <div class="depoimento-autor">
+            <div class="autor-avatar" aria-hidden="true">MS</div>
+            <div>
+              <div class="autor-nome">Marcelo Souza</div>
+              <div class="autor-empresa">Indústria Alimentícia GS</div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- SERVIÇOS -->
-<section id="servicos">
-  <div class="section-inner">
-    <div class="fade-up">
-      <span class="section-label">O que fazemos</span>
-      <h2 class="section-title">Serviços completos de transporte</h2>
-      <p class="section-sub">Do encomenda expressa ao frete de mudança — temos a solução certa para cada necessidade da sua empresa ou família.</p>
+  <!-- COTAÇÃO -->
+  <section id="cotacao">
+    <div class="section-inner">
+      <div class="cotacao-grid">
+        <div class="cotacao-info fade-up">
+          <span class="section-label">Fale conosco</span>
+          <h2 class="section-title">Solicite sua cotação agora</h2>
+          <p>Preencha o formulário ao lado com os detalhes da sua carga e entraremos em contato em até 2 horas úteis com
+            a melhor proposta para você.</p>
+
+          <div class="cotacao-contatos" aria-label="Informações de contato">
+            <div class="contato-item">
+              <svg viewBox="0 0 24 24">
+                <path
+                  d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.67A2 2 0 012 .82h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z" />
+              </svg>
+              <span id="tel-placeholder">(xx) xxxxx-xxxx</span>
+            </div>
+            <div class="contato-item">
+              <svg viewBox="0 0 24 24">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                <polyline points="22,6 12,13 2,6" />
+              </svg>
+              <span id="email-placeholder">contato@transportacerta.com.br</span>
+            </div>
+            <div class="contato-item">
+              <svg viewBox="0 0 24 24">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
+                <circle cx="12" cy="10" r="3" />
+              </svg>
+              <span>Rua Placeholder, 000 — Cidade, RS</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="fade-up">
+          <div class="form-card">
+            <div id="form-msg" class="form-msg" role="alert" aria-live="polite"></div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="nome">Nome completo *</label>
+                <input type="text" id="nome" name="nome" required autocomplete="name" placeholder="Seu nome">
+              </div>
+              <div class="form-group">
+                <label for="telefone">Telefone *</label>
+                <input type="tel" id="telefone" name="telefone" required autocomplete="tel"
+                  placeholder="(xx) xxxxx-xxxx">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="email">E-mail *</label>
+              <input type="email" id="email" name="email" required autocomplete="off" placeholder="seu@email.com.br">
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="origem">Cidade de origem *</label>
+                <input type="text" id="origem" name="origem" required placeholder="Ex: Porto Alegre">
+              </div>
+              <div class="form-group">
+                <label for="destino">Cidade de destino *</label>
+                <input type="text" id="destino" name="destino" required placeholder="Ex: Caxias do Sul">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="tipo">Tipo de serviço *</label>
+                <select id="tipo" name="tipo" required>
+                  <option value="" disabled selected>Selecione...</option>
+                  <option>Entrega Local</option>
+                  <option>Entrega Intermunicipal</option>
+                  <option>Carga Fracionada</option>
+                  <option>E-commerce / Distribuição</option>
+                  <option>Transporte Refrigerado</option>
+                  <option>Frete de Mudança</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="peso">Peso estimado</label>
+                <input type="text" id="peso" name="peso" placeholder="Ex: 50 kg">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="mensagem">Detalhes adicionais</label>
+              <textarea id="mensagem" name="mensagem"
+                placeholder="Descreva sua carga, urgência ou dúvidas..."></textarea>
+            </div>
+
+            <!-- Honeypot anti-spam -->
+            <div class="hp-field" aria-hidden="true">
+              <label for="hp_website">Website</label>
+              <input type="text" id="hp_website" name="hp_website" tabindex="-1" autocomplete="off">
+            </div>
+
+            <div class="form-actions">
+              <button type="button" class="btn-form" id="btn-enviar">
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  viewBox="0 0 24 24" aria-hidden="true">
+                  <line x1="22" y1="2" x2="11" y2="13" />
+                  <polygon points="22 2 15 22 11 13 2 9 22 2" />
+                </svg>
+                Enviar Solicitação
+              </button>
+              <a id="whatsapp-form-btn" href="#" class="btn-wpp" target="_blank" rel="noopener noreferrer"
+                aria-label="Abrir conversa no WhatsApp">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path
+                    d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
+                  <path
+                    d="M12 0C5.373 0 0 5.373 0 12c0 2.117.553 4.099 1.519 5.819L0 24l6.335-1.483A11.944 11.944 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.015-1.375l-.36-.214-3.726.872.937-3.63-.235-.374A9.818 9.818 0 112 12a9.819 9.819 0 0110 9.818z" />
+                </svg>
+                Falar pelo WhatsApp
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+  </section>
 
-    <div class="servicos-grid">
-      <div class="servico-card fade-up">
-        <div class="servico-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24"><path d="M3 3h18v13H3zM8 21h8M12 16v5"/></svg>
-        </div>
-        <h3>Entregas Locais</h3>
-        <p>Coleta e entrega ágil dentro da mesma cidade. Ideal para comércios, e-commerces e pessoas físicas com necessidade de rapidez.</p>
+  <!-- FAQ -->
+  <section id="faq">
+    <div class="section-inner">
+      <div class="fade-up" style="text-align:center;">
+        <span class="section-label">Dúvidas frequentes</span>
+        <h2 class="section-title">Perguntas e respostas</h2>
+        <p class="section-sub" style="margin: 0 auto 3rem;">Reunimos as principais dúvidas dos nossos clientes. Se não
+          encontrar o que procura, fale conosco!</p>
       </div>
 
-      <div class="servico-card fade-up">
-        <div class="servico-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4z"/></svg>
+      <div class="faq-list" role="list">
+        <div class="faq-item" role="listitem">
+          <button class="faq-q" aria-expanded="false">
+            Como faço para solicitar um frete?
+            <svg viewBox="0 0 24 24">
+              <polyline points="6 9 12 15 18 9" />
+            </svg>
+          </button>
+          <div class="faq-a" role="region">
+            <p class="faq-a-inner">Você pode solicitar pelo formulário nesta página, pelo nosso WhatsApp ou por
+              telefone. Informe a origem, o destino, o tipo de carga e o peso estimado — retornaremos com uma cotação em
+              até 2 horas úteis.</p>
+          </div>
         </div>
-        <h3>Entregas Intermunicipais</h3>
-        <p>Rotas entre municípios com planejamento de percurso e cumprimento rigoroso de prazos. Sua carga vai onde precisa chegar.</p>
-      </div>
 
-      <div class="servico-card fade-up">
-        <div class="servico-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2M12 12v4M10 14h4"/></svg>
+        <div class="faq-item" role="listitem">
+          <button class="faq-q" aria-expanded="false">
+            As cargas transportadas são seguradas?
+            <svg viewBox="0 0 24 24">
+              <polyline points="6 9 12 15 18 9" />
+            </svg>
+          </button>
+          <div class="faq-a" role="region">
+            <p class="faq-a-inner">Sim. Todos os transportes incluem cobertura de seguro básica. Para cargas de alto
+              valor, oferecemos apólices ampliadas. Consulte nossa equipe no momento da cotação.</p>
+          </div>
         </div>
-        <h3>Cargas Fracionadas</h3>
-        <p>Não precisa lotar um caminhão inteiro. Transportamos volumes menores com o mesmo cuidado e eficiência, dividindo o custo com outros clientes.</p>
-      </div>
 
-      <div class="servico-card fade-up">
-        <div class="servico-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        <div class="faq-item" role="listitem">
+          <button class="faq-q" aria-expanded="false">
+            Consigo rastrear minha carga em tempo real?
+            <svg viewBox="0 0 24 24">
+              <polyline points="6 9 12 15 18 9" />
+            </svg>
+          </button>
+          <div class="faq-a" role="region">
+            <p class="faq-a-inner">Sim! Ao contratar nosso serviço, você recebe um código de rastreamento pelo WhatsApp
+              ou e-mail. Basta acessar nossa página de rastreamento e acompanhar sua entrega em tempo real.</p>
+          </div>
         </div>
-        <h3>E-commerce & Distribuição</h3>
-        <p>Parceiro ideal para lojas virtuais: coleta frequente, roteirização eficiente e entrega no prazo para que seu cliente fique satisfeito.</p>
-      </div>
 
-      <div class="servico-card fade-up">
-        <div class="servico-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-3"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        <div class="faq-item" role="listitem">
+          <button class="faq-q" aria-expanded="false">
+            Qual é o prazo de entrega?
+            <svg viewBox="0 0 24 24">
+              <polyline points="6 9 12 15 18 9" />
+            </svg>
+          </button>
+          <div class="faq-a" role="region">
+            <p class="faq-a-inner">O prazo varia conforme a distância, o tipo de serviço e a disponibilidade. Entregas
+              locais são realizadas em até 24 horas; intermunicipais, em até 48–72 horas. Prazos expressos estão
+              disponíveis mediante consulta.</p>
+          </div>
         </div>
-        <h3>Transporte Refrigerado</h3>
-        <p>Veículos com câmara fria para cargas que exigem controle de temperatura: alimentos, produtos farmacêuticos e outros itens sensíveis.</p>
-      </div>
 
-      <div class="servico-card fade-up">
-        <div class="servico-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <div class="faq-item" role="listitem">
+          <button class="faq-q" aria-expanded="false">
+            Vocês atendem pessoa física ou apenas empresas?
+            <svg viewBox="0 0 24 24">
+              <polyline points="6 9 12 15 18 9" />
+            </svg>
+          </button>
+          <div class="faq-a" role="region">
+            <p class="faq-a-inner">Atendemos tanto pessoas físicas quanto jurídicas. Seja para uma mudança residencial,
+              um envio pessoal ou contratos de distribuição empresarial, temos a solução certa para você.</p>
+          </div>
         </div>
-        <h3>Fretes de Mudança</h3>
-        <p>Mudanças residenciais e comerciais com equipe especializada no manuseio de móveis e objetos delicados. Você muda, a gente cuida.</p>
+
+        <div class="faq-item" role="listitem">
+          <button class="faq-q" aria-expanded="false">
+            Como funciona o transporte refrigerado?
+            <svg viewBox="0 0 24 24">
+              <polyline points="6 9 12 15 18 9" />
+            </svg>
+          </button>
+          <div class="faq-a" role="region">
+            <p class="faq-a-inner">Contamos com veículos equipados com câmara fria e monitoramento de temperatura.
+              Atendemos cargas que exigem cadeia de frio, como alimentos perecíveis, medicamentos e produtos
+              farmacêuticos. Entre em contato para verificar a disponibilidade na sua rota.</p>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- COBERTURA -->
-<section id="cobertura">
-  <div class="section-inner">
-    <div class="fade-up">
-      <span class="section-label">Onde atuamos</span>
-      <h2 class="section-title">Área de cobertura</h2>
-      <p class="section-sub">Atendemos uma ampla região com rotas planejadas para máxima eficiência e menor custo para você.</p>
-    </div>
-
-    <div class="cobertura-inner fade-up">
-      <div class="cobertura-mapa" aria-label="Ilustração de mapa de cobertura">
-        <div class="mapa-placeholder">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-          <p>Mapa da região atendida<br>(inserir mapa real aqui)</p>
+  <!-- RODAPÉ -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#hero" class="nav-logo" style="text-decoration:none;" aria-label="Ir para o início">
+          <div class="nav-logo-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5S5.17 15.5 6 15.5s1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z" />
+            </svg>
+          </div>
+          <span class="nav-logo-text">Transporta<span>Certa</span></span>
+        </a>
+        <p>Entregamos mais do que cargas — entregamos confiança e tranquilidade para nossos clientes em cada quilômetro.
+        </p>
+        <div class="footer-socials" aria-label="Redes sociais">
+          <a href="#" class="social-btn" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+            <svg viewBox="0 0 24 24">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+              <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z" />
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+            </svg>
+          </a>
+          <a href="#" class="social-btn" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+            <svg viewBox="0 0 24 24">
+              <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z" />
+            </svg>
+          </a>
+          <a href="#" class="social-btn" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+            <svg viewBox="0 0 24 24">
+              <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z" />
+              <circle cx="4" cy="4" r="2" />
+            </svg>
+          </a>
+          <a href="#" class="social-btn" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
+            <svg viewBox="0 0 24 24">
+              <path
+                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
+              <path
+                d="M12 0C5.373 0 0 5.373 0 12c0 2.117.553 4.099 1.519 5.819L0 24l6.335-1.483A11.944 11.944 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.015-1.375l-.36-.214-3.726.872.937-3.63-.235-.374A9.818 9.818 0 112 12a9.819 9.819 0 0110 9.818z" />
+            </svg>
+          </a>
         </div>
       </div>
 
-      <div class="cobertura-regioes">
-        <h3>Cidades e regiões atendidas</h3>
-        <ul class="cobertura-lista" aria-label="Lista de cidades atendidas">
-          <li>
-            <svg viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-            Porto Alegre e Grande Porto Alegre
-          </li>
-          <li>
-            <svg viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-            Vale do Rio dos Sinos (São Leopoldo, Novo Hamburgo)
-          </li>
-          <li>
-            <svg viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-            Serra Gaúcha (Caxias do Sul, Gramado, Canela)
-          </li>
-          <li>
-            <svg viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-            Região Metropolitana Sul (Pelotas, Rio Grande)
-          </li>
-          <li>
-            <svg viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-            Interior do Rio Grande do Sul (sob consulta)
-          </li>
+      <div class="footer-col">
+        <h4>Serviços</h4>
+        <ul>
+          <li><a href="#servicos">Entregas Locais</a></li>
+          <li><a href="#servicos">Entregas Intermunicipais</a></li>
+          <li><a href="#servicos">Cargas Fracionadas</a></li>
+          <li><a href="#servicos">E-commerce</a></li>
+          <li><a href="#servicos">Refrigerado</a></li>
+          <li><a href="#servicos">Mudanças</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Empresa</h4>
+        <ul>
+          <li><a href="#sobre">Sobre nós</a></li>
+          <li><a href="#cobertura">Cobertura</a></li>
+          <li><a href="#depoimentos">Depoimentos</a></li>
+          <li><a href="#faq">FAQ</a></li>
+          <li><a href="#cotacao">Cotação</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Contato</h4>
+        <ul>
+          <li><a href="#">(xx) xxxxx-xxxx</a></li>
+          <li><a href="#">contato@transportacerta.com.br</a></li>
+          <li><a href="#">Rua Placeholder, 000</a></li>
+          <li><a href="#">Cidade — RS, Brasil</a></li>
         </ul>
       </div>
     </div>
-  </div>
-</section>
 
-<!-- DEPOIMENTOS -->
-<section id="depoimentos">
-  <div class="section-inner">
-    <div class="fade-up" style="text-align:center;">
-      <span class="section-label">O que dizem</span>
-      <h2 class="section-title">Clientes que confiam em nós</h2>
-      <p class="section-sub" style="margin: 0 auto 3rem;">A nossa maior conquista é a satisfação de quem escolhe a TransportaCerta todos os dias.</p>
+    <div class="footer-bottom">
+      <span>© 2026 TransportaCerta. Todos os direitos reservados.</span>
+      <span>Feito com cuidado — Rio Grande do Sul, Brasil</span>
     </div>
+  </footer>
 
-    <div class="depoimentos-grid">
-      <div class="depoimento-card fade-up">
-        <div class="estrelas" aria-label="5 estrelas">
-          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-        </div>
-        <p class="depoimento-texto">"Utilizamos a TransportaCerta para a distribuição do nosso e-commerce há mais de dois anos. Nunca tivemos atrasos significativos e o atendimento é sempre rápido e prestativo."</p>
-        <div class="depoimento-autor">
-          <div class="autor-avatar" aria-hidden="true">CR</div>
-          <div>
-            <div class="autor-nome">Carlos Ramos</div>
-            <div class="autor-empresa">Loja Ativa Online</div>
-          </div>
-        </div>
-      </div>
+  <!-- WhatsApp flutuante -->
+  <a class="wpp-float" id="wpp-float-btn" href="#" target="_blank" rel="noopener noreferrer"
+    aria-label="Abrir WhatsApp">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 0C5.373 0 0 5.373 0 12c0 2.117.553 4.099 1.519 5.819L0 24l6.335-1.483A11.944 11.944 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.015-1.375l-.36-.214-3.726.872.937-3.63-.235-.374A9.818 9.818 0 112 12a9.819 9.819 0 0110 9.818z" />
+    </svg>
+  </a>
 
-      <div class="depoimento-card fade-up">
-        <div class="estrelas" aria-label="5 estrelas">
-          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-        </div>
-        <p class="depoimento-texto">"Contratei para uma mudança intermunicipal e fiquei surpresa com o cuidado com os móveis. Nada quebrado, tudo no prazo e a equipe super educada. Recomendo muito!"</p>
-        <div class="depoimento-autor">
-          <div class="autor-avatar" aria-hidden="true">AP</div>
-          <div>
-            <div class="autor-nome">Ana Paula Ferreira</div>
-            <div class="autor-empresa">Cliente Pessoa Física</div>
-          </div>
-        </div>
-      </div>
+  <script>
+    // ─── CONFIGURAÇÕES ─────────────────────────────────
+    let CONFIG = {
+      wpp: '5551999999999',           // Fallback: Número WhatsApp padrão
+      wppMsg: 'Olá! Gostaria de solicitar uma cotação de frete.',
+      web3formsKey: 'SUA_CHAVE_WEB3FORMS_AQUI',  // Fallback: Chave Web3Forms padrão
+    };
 
-      <div class="depoimento-card fade-up">
-        <div class="estrelas" aria-label="5 estrelas">
-          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-        </div>
-        <p class="depoimento-texto">"Nossa indústria precisa de transporte refrigerado confiável. A TransportaCerta entende isso e garante a cadeia de frio com rastreamento constante. Parceria sólida há 3 anos."</p>
-        <div class="depoimento-autor">
-          <div class="autor-avatar" aria-hidden="true">MS</div>
-          <div>
-            <div class="autor-nome">Marcelo Souza</div>
-            <div class="autor-empresa">Indústria Alimentícia GS</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- COTAÇÃO -->
-<section id="cotacao">
-  <div class="section-inner">
-    <div class="cotacao-grid">
-      <div class="cotacao-info fade-up">
-        <span class="section-label">Fale conosco</span>
-        <h2 class="section-title">Solicite sua cotação agora</h2>
-        <p>Preencha o formulário ao lado com os detalhes da sua carga e entraremos em contato em até 2 horas úteis com a melhor proposta para você.</p>
-
-        <div class="cotacao-contatos" aria-label="Informações de contato">
-          <div class="contato-item">
-            <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.67A2 2 0 012 .82h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
-            <span id="tel-placeholder">(xx) xxxxx-xxxx</span>
-          </div>
-          <div class="contato-item">
-            <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-            <span id="email-placeholder">contato@transportacerta.com.br</span>
-          </div>
-          <div class="contato-item">
-            <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-            <span>Rua Placeholder, 000 — Cidade, RS</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="fade-up">
-        <div class="form-card">
-          <div id="form-msg" class="form-msg" role="alert" aria-live="polite"></div>
-          <div class="form-row">
-            <div class="form-group">
-              <label for="nome">Nome completo *</label>
-              <input type="text" id="nome" name="nome" required autocomplete="name" placeholder="Seu nome">
-            </div>
-            <div class="form-group">
-              <label for="telefone">Telefone *</label>
-              <input type="tel" id="telefone" name="telefone" required autocomplete="tel" placeholder="(xx) xxxxx-xxxx">
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="email">E-mail *</label>
-            <input type="email" id="email" name="email" required autocomplete="off" placeholder="seu@email.com.br">
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label for="origem">Cidade de origem *</label>
-              <input type="text" id="origem" name="origem" required placeholder="Ex: Porto Alegre">
-            </div>
-            <div class="form-group">
-              <label for="destino">Cidade de destino *</label>
-              <input type="text" id="destino" name="destino" required placeholder="Ex: Caxias do Sul">
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label for="tipo">Tipo de serviço *</label>
-              <select id="tipo" name="tipo" required>
-                <option value="" disabled selected>Selecione...</option>
-                <option>Entrega Local</option>
-                <option>Entrega Intermunicipal</option>
-                <option>Carga Fracionada</option>
-                <option>E-commerce / Distribuição</option>
-                <option>Transporte Refrigerado</option>
-                <option>Frete de Mudança</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="peso">Peso estimado</label>
-              <input type="text" id="peso" name="peso" placeholder="Ex: 50 kg">
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="mensagem">Detalhes adicionais</label>
-            <textarea id="mensagem" name="mensagem" placeholder="Descreva sua carga, urgência ou dúvidas..."></textarea>
-          </div>
-
-          <!-- Honeypot anti-spam -->
-          <div class="hp-field" aria-hidden="true">
-            <label for="hp_website">Website</label>
-            <input type="text" id="hp_website" name="hp_website" tabindex="-1" autocomplete="off">
-          </div>
-
-          <div class="form-actions">
-            <button type="button" class="btn-form" id="btn-enviar">
-              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" viewBox="0 0 24 24" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-              Enviar Solicitação
-            </button>
-            <a id="whatsapp-form-btn" href="#" class="btn-wpp" target="_blank" rel="noopener noreferrer" aria-label="Abrir conversa no WhatsApp">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.117.553 4.099 1.519 5.819L0 24l6.335-1.483A11.944 11.944 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.015-1.375l-.36-.214-3.726.872.937-3.63-.235-.374A9.818 9.818 0 112 12a9.819 9.819 0 0110 9.818z"/></svg>
-              Falar pelo WhatsApp
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- FAQ -->
-<section id="faq">
-  <div class="section-inner">
-    <div class="fade-up" style="text-align:center;">
-      <span class="section-label">Dúvidas frequentes</span>
-      <h2 class="section-title">Perguntas e respostas</h2>
-      <p class="section-sub" style="margin: 0 auto 3rem;">Reunimos as principais dúvidas dos nossos clientes. Se não encontrar o que procura, fale conosco!</p>
-    </div>
-
-    <div class="faq-list" role="list">
-      <div class="faq-item" role="listitem">
-        <button class="faq-q" aria-expanded="false">
-          Como faço para solicitar um frete?
-          <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
-        </button>
-        <div class="faq-a" role="region">
-          <p class="faq-a-inner">Você pode solicitar pelo formulário nesta página, pelo nosso WhatsApp ou por telefone. Informe a origem, o destino, o tipo de carga e o peso estimado — retornaremos com uma cotação em até 2 horas úteis.</p>
-        </div>
-      </div>
-
-      <div class="faq-item" role="listitem">
-        <button class="faq-q" aria-expanded="false">
-          As cargas transportadas são seguradas?
-          <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
-        </button>
-        <div class="faq-a" role="region">
-          <p class="faq-a-inner">Sim. Todos os transportes incluem cobertura de seguro básica. Para cargas de alto valor, oferecemos apólices ampliadas. Consulte nossa equipe no momento da cotação.</p>
-        </div>
-      </div>
-
-      <div class="faq-item" role="listitem">
-        <button class="faq-q" aria-expanded="false">
-          Consigo rastrear minha carga em tempo real?
-          <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
-        </button>
-        <div class="faq-a" role="region">
-          <p class="faq-a-inner">Sim! Ao contratar nosso serviço, você recebe um código de rastreamento pelo WhatsApp ou e-mail. Basta acessar nossa página de rastreamento e acompanhar sua entrega em tempo real.</p>
-        </div>
-      </div>
-
-      <div class="faq-item" role="listitem">
-        <button class="faq-q" aria-expanded="false">
-          Qual é o prazo de entrega?
-          <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
-        </button>
-        <div class="faq-a" role="region">
-          <p class="faq-a-inner">O prazo varia conforme a distância, o tipo de serviço e a disponibilidade. Entregas locais são realizadas em até 24 horas; intermunicipais, em até 48–72 horas. Prazos expressos estão disponíveis mediante consulta.</p>
-        </div>
-      </div>
-
-      <div class="faq-item" role="listitem">
-        <button class="faq-q" aria-expanded="false">
-          Vocês atendem pessoa física ou apenas empresas?
-          <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
-        </button>
-        <div class="faq-a" role="region">
-          <p class="faq-a-inner">Atendemos tanto pessoas físicas quanto jurídicas. Seja para uma mudança residencial, um envio pessoal ou contratos de distribuição empresarial, temos a solução certa para você.</p>
-        </div>
-      </div>
-
-      <div class="faq-item" role="listitem">
-        <button class="faq-q" aria-expanded="false">
-          Como funciona o transporte refrigerado?
-          <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
-        </button>
-        <div class="faq-a" role="region">
-          <p class="faq-a-inner">Contamos com veículos equipados com câmara fria e monitoramento de temperatura. Atendemos cargas que exigem cadeia de frio, como alimentos perecíveis, medicamentos e produtos farmacêuticos. Entre em contato para verificar a disponibilidade na sua rota.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- RODAPÉ -->
-<footer>
-  <div class="footer-grid">
-    <div class="footer-brand">
-      <a href="#hero" class="nav-logo" style="text-decoration:none;" aria-label="Ir para o início">
-        <div class="nav-logo-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5S5.17 15.5 6 15.5s1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
-        </div>
-        <span class="nav-logo-text">Transporta<span>Certa</span></span>
-      </a>
-      <p>Entregamos mais do que cargas — entregamos confiança e tranquilidade para nossos clientes em cada quilômetro.</p>
-      <div class="footer-socials" aria-label="Redes sociais">
-        <a href="#" class="social-btn" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-          <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
-        </a>
-        <a href="#" class="social-btn" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
-          <svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
-        </a>
-        <a href="#" class="social-btn" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-          <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
-        </a>
-        <a href="#" class="social-btn" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
-          <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.117.553 4.099 1.519 5.819L0 24l6.335-1.483A11.944 11.944 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.015-1.375l-.36-.214-3.726.872.937-3.63-.235-.374A9.818 9.818 0 112 12a9.819 9.819 0 0110 9.818z"/></svg>
-        </a>
-      </div>
-    </div>
-
-    <div class="footer-col">
-      <h4>Serviços</h4>
-      <ul>
-        <li><a href="#servicos">Entregas Locais</a></li>
-        <li><a href="#servicos">Entregas Intermunicipais</a></li>
-        <li><a href="#servicos">Cargas Fracionadas</a></li>
-        <li><a href="#servicos">E-commerce</a></li>
-        <li><a href="#servicos">Refrigerado</a></li>
-        <li><a href="#servicos">Mudanças</a></li>
-      </ul>
-    </div>
-
-    <div class="footer-col">
-      <h4>Empresa</h4>
-      <ul>
-        <li><a href="#sobre">Sobre nós</a></li>
-        <li><a href="#cobertura">Cobertura</a></li>
-        <li><a href="#depoimentos">Depoimentos</a></li>
-        <li><a href="#faq">FAQ</a></li>
-        <li><a href="#cotacao">Cotação</a></li>
-      </ul>
-    </div>
-
-    <div class="footer-col">
-      <h4>Contato</h4>
-      <ul>
-        <li><a href="#">(xx) xxxxx-xxxx</a></li>
-        <li><a href="#">contato@transportacerta.com.br</a></li>
-        <li><a href="#">Rua Placeholder, 000</a></li>
-        <li><a href="#">Cidade — RS, Brasil</a></li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="footer-bottom">
-    <span>© 2026 TransportaCerta. Todos os direitos reservados.</span>
-    <span>Feito com cuidado — Rio Grande do Sul, Brasil</span>
-  </div>
-</footer>
-
-<!-- WhatsApp flutuante -->
-<a class="wpp-float" id="wpp-float-btn" href="#" target="_blank" rel="noopener noreferrer" aria-label="Abrir WhatsApp">
-  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 0C5.373 0 0 5.373 0 12c0 2.117.553 4.099 1.519 5.819L0 24l6.335-1.483A11.944 11.944 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.015-1.375l-.36-.214-3.726.872.937-3.63-.235-.374A9.818 9.818 0 112 12a9.819 9.819 0 0110 9.818z"/></svg>
-</a>
-
-<script>
-// ─── CONFIGURAÇÕES ─────────────────────────────────
-let CONFIG = {
-  wpp: '5551999999999',           // Fallback: Número WhatsApp padrão
-  wppMsg: 'Olá! Gostaria de solicitar uma cotação de frete.',
-  web3formsKey: 'SUA_CHAVE_WEB3FORMS_AQUI',  // Fallback: Chave Web3Forms padrão
-};
-
-// ─── CARREGAR CONFIG DO CLOUDFLARE ──────────────────
-function formatarNumeroWhatsApp(numero) {
-  if (!numero) return '5551999999999';
-  let limpo = numero.toString().replace(/\D/g, ''); // Remove tudo que não for número (parênteses, traços, espaços)
-  if (limpo.startsWith('0')) {
-    limpo = limpo.substring(1); // Remove zero no início se houver
-  }
-  // Se tiver apenas DDD + Número (ex: 51999999999 -> 11 dígitos ou 5133334444 -> 10 dígitos)
-  // Adiciona automaticamente o código do país do Brasil (55)
-  if (limpo.length === 10 || limpo.length === 11) {
-    limpo = '55' + limpo;
-  }
-  return limpo;
-}
-
-async function carregarConfiguracoes() {
-  try {
-    const resposta = await fetch('/config');
-    if (resposta.ok) {
-      const dados = await resposta.json();
-      CONFIG = { ...CONFIG, ...dados };
+    // ─── CARREGAR CONFIG DO CLOUDFLARE ──────────────────
+    function formatarNumeroWhatsApp(numero) {
+      if (!numero) return '5551999999999';
+      let limpo = numero.toString().replace(/\D/g, ''); // Remove tudo que não for número (parênteses, traços, espaços)
+      if (limpo.startsWith('0')) {
+        limpo = limpo.substring(1); // Remove zero no início se houver
+      }
+      // Se tiver apenas DDD + Número (ex: 51999999999 -> 11 dígitos ou 5133334444 -> 10 dígitos)
+      // Adiciona automaticamente o código do país do Brasil (55)
+      if (limpo.length === 10 || limpo.length === 11) {
+        limpo = '55' + limpo;
+      }
+      return limpo;
     }
-  } catch (error) {
-    console.error("Falha ao obter configurações do Cloudflare Pages. Usando fallbacks.", error);
-  }
-  
-  // Tratamento de segurança para formatar o número do WhatsApp corretamente
-  CONFIG.wpp = formatarNumeroWhatsApp(CONFIG.wpp);
-  
-  inicializarApp();
-}
 
-window.addEventListener('DOMContentLoaded', carregarConfiguracoes);
+    async function carregarConfiguracoes() {
+      try {
+        const resposta = await fetch('/config');
+        if (resposta.ok) {
+          const dados = await resposta.json();
+          CONFIG = { ...CONFIG, ...dados };
+        }
+      } catch (error) {
+        console.error("Falha ao obter configurações do Cloudflare Pages. Usando fallbacks.", error);
+      }
 
-function inicializarApp() {
-  // ─── OFUSCAÇÃO DOS CONTATOS ────────────────────────
-  const tel = ['(', 'x', 'x', ')', ' ', 'x', 'x', 'x', 'x', 'x', '-', 'x', 'x', 'x', 'x'].join('');
-  const email = ['c','o','n','t','a','t','o','@','t','r','a','n','s','p','o','r','t','a','c','e','r','t','a','.','c','o','m','.','b','r'].join('');
-  const telEl = document.getElementById('tel-placeholder');
-  const emailEl = document.getElementById('email-placeholder');
-  if (telEl) telEl.textContent = tel;
-  if (emailEl) emailEl.textContent = email;
+      // Tratamento de segurança para formatar o número do WhatsApp corretamente
+      CONFIG.wpp = formatarNumeroWhatsApp(CONFIG.wpp);
 
-  // Links WhatsApp
-  const wppUrl = `https://wa.me/${CONFIG.wpp}?text=${encodeURIComponent(CONFIG.wppMsg)}`;
-  document.querySelectorAll('#whatsapp-link, #wpp-float-btn, #whatsapp-form-btn').forEach(el => el.href = wppUrl);
+      inicializarApp();
+    }
 
-  // Envio dinâmico de dados do formulário para o WhatsApp
-  const wppFormBtn = document.getElementById('whatsapp-form-btn');
-  if (wppFormBtn) {
-    wppFormBtn.addEventListener('click', (e) => {
-      const nome = document.getElementById('nome').value.trim();
-      const telefone = document.getElementById('telefone').value.trim();
-      const email = document.getElementById('email').value.trim();
-      const origem = document.getElementById('origem').value.trim();
-      const destino = document.getElementById('destino').value.trim();
-      const tipo = document.getElementById('tipo').value;
-      const peso = document.getElementById('peso').value.trim();
-      const mensagem = document.getElementById('mensagem').value.trim();
+    window.addEventListener('DOMContentLoaded', carregarConfiguracoes);
 
-      // Se houver algum dado preenchido relevante, envia de forma formatada
-      if (nome || origem || destino || tipo || mensagem) {
-        e.preventDefault(); // Impede abrir o link estático padrão
-        
-        let msg = `🚚 *Nova Solicitação de Cotação*\n\n`;
-        if (nome) msg += `*Nome:* ${nome}\n`;
-        if (telefone) msg += `*Telefone:* ${telefone}\n`;
-        if (email) msg += `*E-mail:* ${email}\n`;
-        if (tipo) msg += `*Serviço:* ${tipo}\n`;
-        if (origem || destino) msg += `*Rota:* ${origem || 'Não informada'} ➔ ${destino || 'Não informada'}\n`;
-        if (peso) msg += `*Peso Estimado:* ${peso}\n`;
-        if (mensagem) msg += `\n*Detalhes adicionais:*\n${mensagem}\n`;
+    function inicializarApp() {
+      // ─── OFUSCAÇÃO DOS CONTATOS ────────────────────────
+      const tel = ['(', 'x', 'x', ')', ' ', 'x', 'x', 'x', 'x', 'x', '-', 'x', 'x', 'x', 'x'].join('');
+      const email = ['c', 'o', 'n', 't', 'a', 't', 'o', '@', 't', 'r', 'a', 'n', 's', 'p', 'o', 'r', 't', 'a', 'c', 'e', 'r', 't', 'a', '.', 'c', 'o', 'm', '.', 'b', 'r'].join('');
+      const telEl = document.getElementById('tel-placeholder');
+      const emailEl = document.getElementById('email-placeholder');
+      if (telEl) telEl.textContent = tel;
+      if (emailEl) emailEl.textContent = email;
 
-        const customWppUrl = `https://wa.me/${CONFIG.wpp}?text=${encodeURIComponent(msg)}`;
-        window.open(customWppUrl, '_blank', 'noopener,noreferrer');
+      // Links WhatsApp
+      const wppUrl = `https://wa.me/${CONFIG.wpp}?text=${encodeURIComponent(CONFIG.wppMsg)}`;
+      document.querySelectorAll('#whatsapp-link, #wpp-float-btn, #whatsapp-form-btn, #whatsapp-hero-btn').forEach(el => el.href = wppUrl);
+
+      // Envio dinâmico de dados do formulário para o WhatsApp
+      const wppFormBtn = document.getElementById('whatsapp-form-btn');
+      if (wppFormBtn) {
+        wppFormBtn.addEventListener('click', (e) => {
+          const nome = document.getElementById('nome').value.trim();
+          const telefone = document.getElementById('telefone').value.trim();
+          const email = document.getElementById('email').value.trim();
+          const origem = document.getElementById('origem').value.trim();
+          const destino = document.getElementById('destino').value.trim();
+          const tipo = document.getElementById('tipo').value;
+          const peso = document.getElementById('peso').value.trim();
+          const mensagem = document.getElementById('mensagem').value.trim();
+
+          // Se houver algum dado preenchido relevante, envia de forma formatada
+          if (nome || origem || destino || tipo || mensagem) {
+            e.preventDefault(); // Impede abrir o link estático padrão
+
+            let msg = `🚚 *Nova Solicitação de Cotação*\n\n`;
+            if (nome) msg += `*Nome:* ${nome}\n`;
+            if (telefone) msg += `*Telefone:* ${telefone}\n`;
+            if (email) msg += `*E-mail:* ${email}\n`;
+            if (tipo) msg += `*Serviço:* ${tipo}\n`;
+            if (origem || destino) msg += `*Rota:* ${origem || 'Não informada'} ➔ ${destino || 'Não informada'}\n`;
+            if (peso) msg += `*Peso Estimado:* ${peso}\n`;
+            if (mensagem) msg += `\n*Detalhes adicionais:*\n${mensagem}\n`;
+
+            const customWppUrl = `https://wa.me/${CONFIG.wpp}?text=${encodeURIComponent(msg)}`;
+            window.open(customWppUrl, '_blank', 'noopener,noreferrer');
+          }
+        });
+      }
+    }
+
+    // ─── NAVBAR SCROLL ────────────────────────────────
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 40);
+    });
+
+    // ─── HAMBURGER ────────────────────────────────────
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    hamburger.addEventListener('click', () => {
+      const open = hamburger.classList.toggle('open');
+      mobileMenu.classList.toggle('open', open);
+      hamburger.setAttribute('aria-expanded', open);
+    });
+
+    document.querySelectorAll('.mobile-link').forEach(link => {
+      link.addEventListener('click', () => {
+        hamburger.classList.remove('open');
+        mobileMenu.classList.remove('open');
+        hamburger.setAttribute('aria-expanded', 'false');
+      });
+    });
+
+    // ─── FAQ ACCORDION ────────────────────────────────
+    document.querySelectorAll('.faq-q').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const item = btn.closest('.faq-item');
+        const answer = item.querySelector('.faq-a');
+        const isOpen = item.classList.contains('open');
+
+        document.querySelectorAll('.faq-item').forEach(i => {
+          i.classList.remove('open');
+          i.querySelector('.faq-a').style.maxHeight = '0';
+          i.querySelector('.faq-q').setAttribute('aria-expanded', 'false');
+        });
+
+        if (!isOpen) {
+          item.classList.add('open');
+          answer.style.maxHeight = answer.scrollHeight + 'px';
+          btn.setAttribute('aria-expanded', 'true');
+        }
+      });
+    });
+
+    // ─── SCROLL ANIMATIONS ────────────────────────────
+    const fadeEls = document.querySelectorAll('.fade-up');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) {
+          const delay = Array.from(e.target.parentElement?.children || []).indexOf(e.target) * 80;
+          setTimeout(() => e.target.classList.add('visible'), delay);
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    fadeEls.forEach(el => observer.observe(el));
+
+    // ─── FORMULÁRIO ────────────────────────────────────
+    function sanitize(str) {
+      const d = document.createElement('div');
+      d.textContent = str;
+      return d.innerHTML;
+    }
+
+    function validateEmail(email) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    document.getElementById('btn-enviar').addEventListener('click', async () => {
+      const msgEl = document.getElementById('form-msg');
+      msgEl.className = 'form-msg';
+      msgEl.textContent = '';
+
+      // Honeypot check
+      if (document.getElementById('hp_website').value) return;
+
+      const nome = sanitize(document.getElementById('nome').value.trim());
+      const telefone = sanitize(document.getElementById('telefone').value.trim());
+      const email = sanitize(document.getElementById('email').value.trim());
+      const origem = sanitize(document.getElementById('origem').value.trim());
+      const destino = sanitize(document.getElementById('destino').value.trim());
+      const tipo = sanitize(document.getElementById('tipo').value);
+      const peso = sanitize(document.getElementById('peso').value.trim());
+      const mensagem = sanitize(document.getElementById('mensagem').value.trim());
+
+      if (!nome || !telefone || !email || !origem || !destino || !tipo) {
+        msgEl.textContent = 'Por favor, preencha todos os campos obrigatórios (*).';
+        msgEl.className = 'form-msg error';
+        return;
+      }
+      if (!validateEmail(email)) {
+        msgEl.textContent = 'Informe um e-mail válido.';
+        msgEl.className = 'form-msg error';
+        return;
+      }
+
+      const btn = document.getElementById('btn-enviar');
+      btn.disabled = true;
+      btn.textContent = 'Enviando...';
+
+      try {
+        const res = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({
+            access_key: CONFIG.web3formsKey,
+            subject: `Nova cotação — ${tipo} (${origem} → ${destino})`,
+            nome, telefone, email, origem, destino,
+            tipo_servico: tipo, peso_estimado: peso || 'Não informado',
+            mensagem: mensagem || 'Sem detalhes adicionais.',
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
+          msgEl.textContent = 'Solicitação enviada com sucesso! Entraremos em contato em breve.';
+          msgEl.className = 'form-msg success';
+          ['nome', 'telefone', 'email', 'origem', 'destino', 'peso', 'mensagem'].forEach(id => {
+            document.getElementById(id).value = '';
+          });
+          document.getElementById('tipo').value = '';
+        } else {
+          throw new Error('Falha no envio');
+        }
+      } catch {
+        msgEl.textContent = 'Ocorreu um erro ao enviar. Por favor, tente pelo WhatsApp.';
+        msgEl.className = 'form-msg error';
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" viewBox="0 0 24 24" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> Enviar Solicitação';
       }
     });
-  }
-}
-
-// ─── NAVBAR SCROLL ────────────────────────────────
-const navbar = document.getElementById('navbar');
-window.addEventListener('scroll', () => {
-  navbar.classList.toggle('scrolled', window.scrollY > 40);
-});
-
-// ─── HAMBURGER ────────────────────────────────────
-const hamburger = document.getElementById('hamburger');
-const mobileMenu = document.getElementById('mobile-menu');
-
-hamburger.addEventListener('click', () => {
-  const open = hamburger.classList.toggle('open');
-  mobileMenu.classList.toggle('open', open);
-  hamburger.setAttribute('aria-expanded', open);
-});
-
-document.querySelectorAll('.mobile-link').forEach(link => {
-  link.addEventListener('click', () => {
-    hamburger.classList.remove('open');
-    mobileMenu.classList.remove('open');
-    hamburger.setAttribute('aria-expanded', 'false');
-  });
-});
-
-// ─── FAQ ACCORDION ────────────────────────────────
-document.querySelectorAll('.faq-q').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const item = btn.closest('.faq-item');
-    const answer = item.querySelector('.faq-a');
-    const isOpen = item.classList.contains('open');
-
-    document.querySelectorAll('.faq-item').forEach(i => {
-      i.classList.remove('open');
-      i.querySelector('.faq-a').style.maxHeight = '0';
-      i.querySelector('.faq-q').setAttribute('aria-expanded', 'false');
-    });
-
-    if (!isOpen) {
-      item.classList.add('open');
-      answer.style.maxHeight = answer.scrollHeight + 'px';
-      btn.setAttribute('aria-expanded', 'true');
-    }
-  });
-});
-
-// ─── SCROLL ANIMATIONS ────────────────────────────
-const fadeEls = document.querySelectorAll('.fade-up');
-const observer = new IntersectionObserver(entries => {
-  entries.forEach((e, i) => {
-    if (e.isIntersecting) {
-      const delay = Array.from(e.target.parentElement?.children || []).indexOf(e.target) * 80;
-      setTimeout(() => e.target.classList.add('visible'), delay);
-      observer.unobserve(e.target);
-    }
-  });
-}, { threshold: 0.12 });
-fadeEls.forEach(el => observer.observe(el));
-
-// ─── FORMULÁRIO ────────────────────────────────────
-function sanitize(str) {
-  const d = document.createElement('div');
-  d.textContent = str;
-  return d.innerHTML;
-}
-
-function validateEmail(email) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-}
-
-document.getElementById('btn-enviar').addEventListener('click', async () => {
-  const msgEl = document.getElementById('form-msg');
-  msgEl.className = 'form-msg';
-  msgEl.textContent = '';
-
-  // Honeypot check
-  if (document.getElementById('hp_website').value) return;
-
-  const nome = sanitize(document.getElementById('nome').value.trim());
-  const telefone = sanitize(document.getElementById('telefone').value.trim());
-  const email = sanitize(document.getElementById('email').value.trim());
-  const origem = sanitize(document.getElementById('origem').value.trim());
-  const destino = sanitize(document.getElementById('destino').value.trim());
-  const tipo = sanitize(document.getElementById('tipo').value);
-  const peso = sanitize(document.getElementById('peso').value.trim());
-  const mensagem = sanitize(document.getElementById('mensagem').value.trim());
-
-  if (!nome || !telefone || !email || !origem || !destino || !tipo) {
-    msgEl.textContent = 'Por favor, preencha todos os campos obrigatórios (*).';
-    msgEl.className = 'form-msg error';
-    return;
-  }
-  if (!validateEmail(email)) {
-    msgEl.textContent = 'Informe um e-mail válido.';
-    msgEl.className = 'form-msg error';
-    return;
-  }
-
-  const btn = document.getElementById('btn-enviar');
-  btn.disabled = true;
-  btn.textContent = 'Enviando...';
-
-  try {
-    const res = await fetch('https://api.web3forms.com/submit', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify({
-        access_key: CONFIG.web3formsKey,
-        subject: `Nova cotação — ${tipo} (${origem} → ${destino})`,
-        nome, telefone, email, origem, destino,
-        tipo_servico: tipo, peso_estimado: peso || 'Não informado',
-        mensagem: mensagem || 'Sem detalhes adicionais.',
-      })
-    });
-    const data = await res.json();
-    if (data.success) {
-      msgEl.textContent = 'Solicitação enviada com sucesso! Entraremos em contato em breve.';
-      msgEl.className = 'form-msg success';
-      ['nome','telefone','email','origem','destino','peso','mensagem'].forEach(id => {
-        document.getElementById(id).value = '';
-      });
-      document.getElementById('tipo').value = '';
-    } else {
-      throw new Error('Falha no envio');
-    }
-  } catch {
-    msgEl.textContent = 'Ocorreu um erro ao enviar. Por favor, tente pelo WhatsApp.';
-    msgEl.className = 'form-msg error';
-  } finally {
-    btn.disabled = false;
-    btn.innerHTML = '<svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" viewBox="0 0 24 24" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> Enviar Solicitação';
-  }
-});
-</script>
+  </script>
 </body>
+
 </html>
